@@ -27,7 +27,7 @@ class BaseTransform:
         return arrHilbert
 
     def waveRec1(self, arrHilbert, level):
-        arrTime = arrHilbert
+        arrTime = arrHilbert.copy()
         dataLength = len(arrTime)
         transformWaveletLength = self.__wavelet.__wavelet__.__transformWaveletLength__
         h = transformWaveletLength

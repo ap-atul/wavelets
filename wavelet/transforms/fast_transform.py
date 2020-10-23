@@ -15,7 +15,7 @@ class FastWaveletTransform(BaseTransform):
 
         if dimensions == 1:
             level = getExponent(len(arrHilbert))
-            return self.waveRec1(arrHilbert, level)
+            return self.waveRec1(list(arrHilbert), level)
         elif dimensions == 2:
             return self.waveRec2(arrHilbert)
 
@@ -25,6 +25,6 @@ class FastWaveletTransform(BaseTransform):
 
         if dimensions == 1:
             level = getExponent(len(arrTime))
-            return self.waveDec1(arrTime, level)
+            return self.waveDec1(list(arrTime), level)
         elif dimensions == 2:
             return self.waveDec2(arrTime)
