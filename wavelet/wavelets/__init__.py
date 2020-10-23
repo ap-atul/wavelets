@@ -1,9 +1,10 @@
 from wavelet.exceptions.custom import WaveletImplementationMissing
-from wavelet.wavelets import db4
+from wavelet.wavelets import db4, haar
 
 # all wavelets go here
 wavelet = {
-    "db4": db4.Daubechies4
+    "db4": db4.Daubechies4,
+    "haar": haar.Haar
 }
 
 
