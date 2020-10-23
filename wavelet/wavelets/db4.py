@@ -8,7 +8,7 @@ class Daubechies4:
     """
     __name__ = "Daubechies Wavelet 4"
     __motherWaveletLength__ = 8  # length of the mother wavelet
-    __transformWaveletLength = 2  # minimum wavelength of input signal
+    __transformWaveletLength__ = 2  # minimum wavelength of input signal
 
     # decomposition filter
     # low-pass
