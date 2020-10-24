@@ -10,7 +10,7 @@ class Wavelet:
 
     Attributes
     ----------
-    __wavelet__ : object
+    __wavelet__: object
         object of the selected wavelet class
     """
 
