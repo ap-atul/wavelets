@@ -28,4 +28,4 @@ $ git clone https://github.com/AP-Atul/Wavelets.git
 $ python run.py
 ```
 
-Check the examples/ for some examples on the usage
+Check the examples/ for some examples on the usage. Refer the html ```docs/```
