@@ -1,11 +1,38 @@
+"""Discrete Wavelet and Inverse Transform implementation"""
+
 from wavelet.wavelets import getWaveletDefinition
 
 
 class Wavelet:
+    """
+    Class to store the selected wavelet and to perform the dwt & idwt
+    based on the wavelet filters
+
+    Attributes
+    ----------
+    __wavelet__ : object
+        object of the selected wavelet class
+    """
+
     def __init__(self, waveletName):
         self.__wavelet__ = getWaveletDefinition(waveletName)
 
     def dwt(self, arrTime, level):
+        """
+        Discrete Wavelet Transform
+
+        Parameters
+        ----------
+        arrTime : array_like
+            input array in Time domain
+        level : int
+            level to decompose
+
+        Returns
+        -------
+        array_like
+            output array in Frequency or the Hilbert domain
+        """
         arrHilbert = [0.] * level
         # shrinking value 8 -> 4 -> 2
         a = level >> 1
@@ -24,6 +51,21 @@ class Wavelet:
         return arrHilbert
 
     def idwt(self, arrHilbert, level):
+        """
+        Inverse Discrete Wavelet Transform
+
+        Parameters
+        ----------
+        arrHilbert : array_like
+            input array in Frequency or the Hilbert domain
+        level : int
+            level to decompose
+
+        Returns
+        -------
+        array_like
+            output array in Time domain
+        """
         arrTime = [0.] * level
         # shrinking value 8 -> 4 -> 2
         a = level >> 1

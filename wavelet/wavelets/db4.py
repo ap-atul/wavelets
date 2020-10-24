@@ -1,3 +1,6 @@
+""" Daubechies 4 wavelet """
+
+
 class Daubechies4:
     """
     Properties

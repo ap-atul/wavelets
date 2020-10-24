@@ -1,3 +1,6 @@
+""" Haar Wavelet """
+
+
 class Haar:
     """
     Properties
@@ -6,7 +9,7 @@ class Haar:
 
     All values are from http://wavelets.pybytes.com/wavelet/haar/
     """
-    __name__ = "Haar Wavelet "
+    __name__ = "Haar Wavelet"
     __motherWaveletLength__ = 2  # length of the mother wavelet
     __transformWaveletLength__ = 2  # minimum wavelength of input signal
 
