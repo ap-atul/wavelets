@@ -1,3 +1,5 @@
+"""Maps the wavelet name to the Wavelet Class object"""
+
 from wavelet.exceptions.custom import WaveletImplementationMissing
 from wavelet.wavelets import db4, haar
 
@@ -9,6 +11,36 @@ wavelet = {
 
 
 def getWaveletDefinition(name):
+    """
+    Returns the wavelet class
+
+    Parameters
+    ----------
+    name: str
+        name of the wavelet
+
+    Raises
+    ------
+    WaveletImplementationMissing
+        missing wavelet implementation
+
+    Returns
+    -------
+    object
+        object of the wavelet
+    """
     if name not in wavelet:
         raise WaveletImplementationMissing(WaveletImplementationMissing.__cause__)
     return wavelet[name]
+
+
+def getAllWavelets():
+    """
+    Returns a list of all the implemented/stored wavelets
+
+    Returns
+    -------
+    list
+        list of all the wavelets
+    """
+    return wavelet.keys()
