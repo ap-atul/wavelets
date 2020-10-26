@@ -40,31 +40,84 @@
                 </summary>
                 <pre><code class="python">&#34;&#34;&#34;Utility functions&#34;&#34;&#34;
 
-from math import log
+from math import log, pow
+
+import numpy as np
+
+from wavelet.exceptions.custom import WaveletException
 
 
 def getExponent(value):
+    &#34;&#34;&#34;Returns the exponent for the data Ex: 8 -&gt; 3 [2 ^ 3]&#34;&#34;&#34;
+    return int(log(value) / log(2.))
+
+
+def scalb(f, scaleFactor):
+    &#34;&#34;&#34;Return the scale for the factor&#34;&#34;&#34;
+    return f * pow(2., scaleFactor)
+
+
+def isPowerOf2(number):
+    &#34;&#34;&#34;Checks if the length is equal to the power of 2&#34;&#34;&#34;
+    power = getExponent(number)
+    result = scalb(1., power)
+
+    return result == number
+
+
+def decomposeArbitraryLength(number):
     &#34;&#34;&#34;
-    Returns the exponent for the data length
+    Returns decomposition for the numbers
 
     Examples
     --------
-    &gt;&gt;&gt; getExponent(8)
-    3
-    &gt;&gt;&gt; getExponent(32)
-    5
-
-    Parameters
-    ----------
-    value : float
-        any number
-
-    Returns
-    -------
-    int
-        power of 2
+    number 42 : 32 + 8 + 2
+    powers : 5, 3, 1
     &#34;&#34;&#34;
-    return int(log(value) / log(2.))</code></pre>
+    if number &lt; 1:
+        raise WaveletException(&#34;Number should be greater than 1&#34;)
+
+    tempArray = list()
+    current = number
+    position = 0
+
+    while current &gt;= 1.:
+        power = getExponent(current)
+        tempArray.append(power)
+        current = current - scalb(1., power)
+        position += 1
+
+    ancientEgyptianMultipliers = tempArray[:position]
+    return ancientEgyptianMultipliers
+
+
+def threshold(data, value, substitute=0):
+    &#34;&#34;&#34;Soft thresholding&#34;&#34;&#34;
+
+    data = np.asarray(data)
+    magnitude = np.absolute(data)
+
+    with np.errstate(divide=&#39;ignore&#39;):
+        # divide by zero okay as np.inf values get clipped, so ignore warning.
+        thresholded = (1 - value / magnitude)
+        thresholded.clip(min=0, max=None, out=thresholded)
+        thresholded = data * thresholded
+
+    if substitute == 0:
+        return thresholded
+    else:
+        cond = np.less(magnitude, value)
+        return np.where(cond, substitute, thresholded)
+
+
+def mad(arr):
+    &#34;&#34;&#34; Median Absolute Deviation: a &#34;Robust&#34; version of standard deviation.
+        Indices variability of the sample.
+        https://en.wikipedia.org/wiki/Median_absolute_deviation
+    &#34;&#34;&#34;
+    arr = np.ma.array(arr).compressed()
+    med = np.median(arr)
+    return np.median(np.abs(arr - med))</code></pre>
             </details>
         </section>
         <section>
@@ -74,54 +127,137 @@ def getExponent(value):
         <section>
             <h2 class="section-title" id="header-functions">Functions</h2>
             <dl>
+                <dt id="wavelet.util.utility.decomposeArbitraryLength"><code class="name flex">
+                    <span>def <span class="ident">decomposeArbitraryLength</span></span>(<span>number)</span>
+                </code></dt>
+                <dd>
+                    <div class="desc"><p>Returns decomposition for the numbers</p>
+                        <h2 id="examples">Examples</h2>
+                        <p>number 42 : 32 + 8 + 2
+                            powers : 5, 3, 1</p></div>
+                    <details class="source">
+                        <summary>
+                            <span>Expand source code</span>
+                        </summary>
+                        <pre><code class="python">def decomposeArbitraryLength(number):
+    &#34;&#34;&#34;
+    Returns decomposition for the numbers
+
+    Examples
+    --------
+    number 42 : 32 + 8 + 2
+    powers : 5, 3, 1
+    &#34;&#34;&#34;
+    if number &lt; 1:
+        raise WaveletException(&#34;Number should be greater than 1&#34;)
+
+    tempArray = list()
+    current = number
+    position = 0
+
+    while current &gt;= 1.:
+        power = getExponent(current)
+        tempArray.append(power)
+        current = current - scalb(1., power)
+        position += 1
+
+    ancientEgyptianMultipliers = tempArray[:position]
+    return ancientEgyptianMultipliers</code></pre>
+                    </details>
+                </dd>
                 <dt id="wavelet.util.utility.getExponent"><code class="name flex">
                     <span>def <span class="ident">getExponent</span></span>(<span>value)</span>
                 </code></dt>
                 <dd>
-                    <div class="desc"><p>Returns the exponent for the data length</p>
-                        <h2 id="examples">Examples</h2>
-                        <pre><code class="python-repl">&gt;&gt;&gt; getExponent(8)
-3
-&gt;&gt;&gt; getExponent(32)
-5
-</code></pre>
-                        <h2 id="parameters">Parameters</h2>
-                        <dl>
-                            <dt><strong><code>value</code></strong> :&ensp;<code>float</code></dt>
-                            <dd>any number</dd>
-                        </dl>
-                        <h2 id="returns">Returns</h2>
-                        <dl>
-                            <dt><code>int</code></dt>
-                            <dd>power of 2</dd>
-                        </dl>
-                    </div>
+                    <div class="desc"><p>Returns the exponent for the data Ex: 8 -&gt; 3 [2 ^ 3]</p></div>
                     <details class="source">
                         <summary>
                             <span>Expand source code</span>
                         </summary>
                         <pre><code class="python">def getExponent(value):
-    &#34;&#34;&#34;
-    Returns the exponent for the data length
-
-    Examples
-    --------
-    &gt;&gt;&gt; getExponent(8)
-    3
-    &gt;&gt;&gt; getExponent(32)
-    5
-
-    Parameters
-    ----------
-    value : float
-        any number
-
-    Returns
-    -------
-    int
-        power of 2
-    &#34;&#34;&#34;
+    &#34;&#34;&#34;Returns the exponent for the data Ex: 8 -&gt; 3 [2 ^ 3]&#34;&#34;&#34;
     return int(log(value) / log(2.))</code></pre>
+                    </details>
+                </dd>
+                <dt id="wavelet.util.utility.isPowerOf2"><code class="name flex">
+                    <span>def <span class="ident">isPowerOf2</span></span>(<span>number)</span>
+                </code></dt>
+                <dd>
+                    <div class="desc"><p>Checks if the length is equal to the power of 2</p></div>
+                    <details class="source">
+                        <summary>
+                            <span>Expand source code</span>
+                        </summary>
+                        <pre><code class="python">def isPowerOf2(number):
+    &#34;&#34;&#34;Checks if the length is equal to the power of 2&#34;&#34;&#34;
+    power = getExponent(number)
+    result = scalb(1., power)
+
+    return result == number</code></pre>
+                    </details>
+                </dd>
+                <dt id="wavelet.util.utility.mad"><code class="name flex">
+                    <span>def <span class="ident">mad</span></span>(<span>arr)</span>
+                </code></dt>
+                <dd>
+                    <div class="desc"><p>Median Absolute Deviation: a "Robust" version of standard deviation.
+                        Indices variability of the sample.
+                        <a href="https://en.wikipedia.org/wiki/Median_absolute_deviation">https://en.wikipedia.org/wiki/Median_absolute_deviation</a>
+                    </p></div>
+                    <details class="source">
+                        <summary>
+                            <span>Expand source code</span>
+                        </summary>
+                        <pre><code class="python">def mad(arr):
+    &#34;&#34;&#34; Median Absolute Deviation: a &#34;Robust&#34; version of standard deviation.
+        Indices variability of the sample.
+        https://en.wikipedia.org/wiki/Median_absolute_deviation
+    &#34;&#34;&#34;
+    arr = np.ma.array(arr).compressed()
+    med = np.median(arr)
+    return np.median(np.abs(arr - med))</code></pre>
+                    </details>
+                </dd>
+                <dt id="wavelet.util.utility.scalb"><code class="name flex">
+                    <span>def <span class="ident">scalb</span></span>(<span>f, scaleFactor)</span>
+                </code></dt>
+                <dd>
+                    <div class="desc"><p>Return the scale for the factor</p></div>
+                    <details class="source">
+                        <summary>
+                            <span>Expand source code</span>
+                        </summary>
+                        <pre><code class="python">def scalb(f, scaleFactor):
+    &#34;&#34;&#34;Return the scale for the factor&#34;&#34;&#34;
+    return f * pow(2., scaleFactor)</code></pre>
+                    </details>
+                </dd>
+                <dt id="wavelet.util.utility.threshold"><code class="name flex">
+                    <span>def <span class="ident">threshold</span></span>(<span>data, value, substitute=0)</span>
+                </code></dt>
+                <dd>
+                    <div class="desc"><p>Soft thresholding</p></div>
+                    <details class="source">
+                        <summary>
+                            <span>Expand source code</span>
+                        </summary>
+                        <pre><code class="python">def threshold(data, value, substitute=0):
+    &#34;&#34;&#34;Soft thresholding&#34;&#34;&#34;
+
+    data = np.asarray(data)
+    magnitude = np.absolute(data)
+
+    with np.errstate(divide=&#39;ignore&#39;):
+        # divide by zero okay as np.inf values get clipped, so ignore warning.
+        thresholded = (1 - value / magnitude)
+        thresholded.clip(min=0, max=None, out=thresholded)
+        thresholded = data * thresholded
+
+    if substitute == 0:
+        return thresholded
+    else:
+        cond = np.less(magnitude, value)
+        return np.where(cond, substitute, thresholded)</code></pre>
                     </details>
                 </dd>
             </dl>
@@ -142,8 +278,18 @@ def getExponent(value):
             </li>
             <li><h3><a href="#header-functions">Functions</a></h3>
                 <ul class="">
+                    <li><code><a href="#wavelet.util.utility.decomposeArbitraryLength"
+                                 title="wavelet.util.utility.decomposeArbitraryLength">decomposeArbitraryLength</a></code>
+                    </li>
                     <li><code><a href="#wavelet.util.utility.getExponent" title="wavelet.util.utility.getExponent">getExponent</a></code>
                     </li>
+                    <li><code><a href="#wavelet.util.utility.isPowerOf2" title="wavelet.util.utility.isPowerOf2">isPowerOf2</a></code>
+                    </li>
+                    <li><code><a href="#wavelet.util.utility.mad" title="wavelet.util.utility.mad">mad</a></code></li>
+                    <li><code><a href="#wavelet.util.utility.scalb" title="wavelet.util.utility.scalb">scalb</a></code>
+                    </li>
+                    <li><code><a href="#wavelet.util.utility.threshold"
+                                 title="wavelet.util.utility.threshold">threshold</a></code></li>
                 </ul>
             </li>
         </ul>
