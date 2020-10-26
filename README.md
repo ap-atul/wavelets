@@ -14,9 +14,19 @@ The fundamental idea of wavelet transforms is that the transformation should all
 This is affected by choosing suitable basis functions that allow for this.
 Changes in the time extension are expected to conform to the corresponding analysis frequency of the basis function.
 
+## API
+Dimension implemented (1D, 2D)
+Just call  ```waveDec``` for wavelet decomposition for any dim, length array
+And ```waveRec``` for wavelet reconstruction for any dim, length array
+
+Note: For n dimension with length not power of 2, you will need to flatten() the array
+```np.asarray(data).flatten```
+
+Check the ```examples/``` for some examples on the usage. Refer the html ```docs/```
+
+
 ## Limitations
-Since the wavelet transform with the Discrete Wavelet Transform, only works with the power of 2 length data. i.e. 2, 4, 8, 16, 32.
-For arbitrary length signal Ancient Egyptian Multiplication can be implemented. (will try it)
+The performance is not that good. Help to make it even better by contributing
 
 ## Usage
 1. Clone the repo
@@ -28,4 +38,3 @@ $ git clone https://github.com/AP-Atul/Wavelets.git
 $ python run.py
 ```
 
-Check the ```examples/``` for some examples on the usage. Refer the html ```docs/```

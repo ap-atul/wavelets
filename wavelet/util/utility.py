@@ -1,27 +1,80 @@
 """Utility functions"""
 
-from math import log
+from math import log, pow
+
+import numpy as np
+
+from wavelet.exceptions.custom import WaveletException
 
 
 def getExponent(value):
+    """Returns the exponent for the data Ex: 8 -> 3 [2 ^ 3]"""
+    return int(log(value) / log(2.))
+
+
+def scalb(f, scaleFactor):
+    """Return the scale for the factor"""
+    return f * pow(2., scaleFactor)
+
+
+def isPowerOf2(number):
+    """Checks if the length is equal to the power of 2"""
+    power = getExponent(number)
+    result = scalb(1., power)
+
+    return result == number
+
+
+def decomposeArbitraryLength(number):
     """
-    Returns the exponent for the data length
+    Returns decomposition for the numbers
 
     Examples
     --------
-    >>> getExponent(8)
-    3
-    >>> getExponent(32)
-    5
-
-    Parameters
-    ----------
-    value : float
-        any number
-
-    Returns
-    -------
-    int
-        power of 2
+    number 42 : 32 + 8 + 2
+    powers : 5, 3, 1
     """
-    return int(log(value) / log(2.))
+    if number < 1:
+        raise WaveletException("Number should be greater than 1")
+
+    tempArray = list()
+    current = number
+    position = 0
+
+    while current >= 1.:
+        power = getExponent(current)
+        tempArray.append(power)
+        current = current - scalb(1., power)
+        position += 1
+
+    ancientEgyptianMultipliers = tempArray[:position]
+    return ancientEgyptianMultipliers
+
+
+def threshold(data, value, substitute=0):
+    """Soft thresholding"""
+
+    data = np.asarray(data)
+    magnitude = np.absolute(data)
+
+    with np.errstate(divide='ignore'):
+        # divide by zero okay as np.inf values get clipped, so ignore warning.
+        thresholded = (1 - value / magnitude)
+        thresholded.clip(min=0, max=None, out=thresholded)
+        thresholded = data * thresholded
+
+    if substitute == 0:
+        return thresholded
+    else:
+        cond = np.less(magnitude, value)
+        return np.where(cond, substitute, thresholded)
+
+
+def mad(arr):
+    """ Median Absolute Deviation: a "Robust" version of standard deviation.
+        Indices variability of the sample.
+        https://en.wikipedia.org/wiki/Median_absolute_deviation
+    """
+    arr = np.ma.array(arr).compressed()
+    med = np.median(arr)
+    return np.median(np.abs(arr - med))

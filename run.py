@@ -1,3 +1,5 @@
+import numpy as np
+
 from wavelet.fast_transform import FastWaveletTransform
 
 WAVELET_NAME = "db4"
@@ -9,9 +11,9 @@ data = [[1, 1, 1, 1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1, 1, 1, 1]]
 
-print(data)
+data = np.asarray(data).flatten()
 
 # decomposition --> reconstruction
-coefficients = t.waveDec(data)
+coefficients = t.waveDec(np.asarray(data).flatten())
 data = t.waveRec(coefficients)
 print(data)

@@ -3,7 +3,7 @@
 import numpy as np
 
 from wavelet.transforms.base_transform import BaseTransform
-from wavelet.util.utility import getExponent
+from wavelet.util.utility import getExponent, isPowerOf2, decomposeArbitraryLength, scalb
 
 
 class FastWaveletTransform(BaseTransform):
@@ -32,6 +32,12 @@ class FastWaveletTransform(BaseTransform):
         arrHilbert = np.array(arrHilbert)
         dimensions = np.ndim(arrHilbert)
 
+        # checking if the data is not of arbitrary length
+        # special cases only for 1D arrays
+        if dimensions == 1 and not isPowerOf2(len(arrHilbert)):
+            # perform ancient egyptian decomposition
+            return self.__waveRecAncientEgyptian(arrHilbert)
+
         if dimensions == 1:
             level = getExponent(len(arrHilbert))
             return self.waveRec1(list(arrHilbert), level)
@@ -55,8 +61,98 @@ class FastWaveletTransform(BaseTransform):
         arrTime = np.array(arrTime)
         dimensions = np.ndim(arrTime)
 
+        # checking if the data is not of arbitrary length
+        # special cases only for 1D arrays
+        if dimensions == 1 and not isPowerOf2(len(arrTime)):
+            # perform ancient egyptian decomposition
+            return self.__waveDecAncientEgyptian(arrTime)
+
+        # data of length power of 2
         if dimensions == 1:
             level = getExponent(len(arrTime))
             return self.waveDec1(list(arrTime), level)
+
         elif dimensions == 2:
             return self.waveDec2(list(arrTime))
+
+    def __waveDecAncientEgyptian(self, arrTime):
+        """
+        Wavelet decomposition for data of arbitrary length
+
+        References
+        ----------
+        The array is distributed by the length of the power of 2
+        and then wavelet decomposition is performed
+        Look into the utility.decomposeArbitraryLength function
+
+        for a data with length 42
+        Ex: 42 = 2^5, 2^3, 2^1   i.e. 32, 8, 2 lengths partitions are made
+
+        Parameters
+        ----------
+        arrTime: array_like
+            input array in the time domain
+
+        Returns
+        -------
+        array_like
+            hilbert domain array
+        """
+        arrHilbert = list()
+        powers = decomposeArbitraryLength(len(arrTime))
+        offset = 0
+
+        # running for each decomposed array by power
+        for power in powers:
+            sliceIndex = int(scalb(1., power))
+            arrTimeSliced = arrTime[offset: (offset + sliceIndex)]
+
+            # run the wavelet decomposition for the slice
+            arrHilbertSliced = self.waveDec(arrTimeSliced)
+            arrHilbert.extend(arrHilbertSliced)
+
+            # incrementing the offset
+            offset += sliceIndex
+
+        return arrHilbert
+
+    def __waveRecAncientEgyptian(self, arrHilbert):
+        """
+        Wavelet reconstruction for data of arbitrary length
+
+        References
+        ----------
+        The array is distributed by the length of the power of 2
+        and then wavelet decomposition is performed
+        Look into the utility.decomposeArbitraryLength function
+
+        for a data with length 42
+        Ex: 42 = 2^5, 2^3, 2^1   i.e. 32, 8, 2 lengths partitions are made
+
+        Parameters
+        ----------
+        arrHilbert: array_like
+            input array in the hilbert domain
+
+        Returns
+        -------
+        array_like
+            hilbert time array
+        """
+        arrTime = list()
+        powers = decomposeArbitraryLength(len(arrHilbert))
+        offset = 0
+
+        # running for each decomposed array by power
+        for power in powers:
+            sliceIndex = int(scalb(1., power))
+            arrHilbertSliced = arrHilbert[offset: (offset + sliceIndex)]
+
+            # run the wavelet decomposition for the slice
+            arrTimeSliced = self.waveRec(arrHilbertSliced)
+            arrTime.extend(arrTimeSliced)
+
+            # incrementing the offset
+            offset += sliceIndex
+
+        return arrTime
