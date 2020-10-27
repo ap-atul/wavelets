@@ -1,12 +1,9 @@
 """Fast Wavelet Transform calls the Base Transform based on the dimensions"""
 
-import os
-from multiprocessing import Pool
-
 import numpy as np
 
-from wavelet.transforms.base_transform import BaseTransform
-from wavelet.util.utility import getExponent, isPowerOf2, decomposeArbitraryLength, scalb
+from wavelet.transforms import BaseTransform
+from wavelet.util import getExponent, isPowerOf2, decomposeArbitraryLength, scalb
 
 
 class FastWaveletTransform(BaseTransform):
@@ -118,46 +115,6 @@ class FastWaveletTransform(BaseTransform):
 
         return arrHilbert
 
-    def __waveDecAncientEgyptian2(self, arrTime):
-        """
-        Wavelet decomposition for data of arbitrary length
-
-        References
-        ----------
-        The array is distributed by the length of the power of 2
-        and then wavelet decomposition is performed
-        Look into the utility.decomposeArbitraryLength function
-
-        for a data with length 42
-        Ex: 42 = 2^5, 2^3, 2^1   i.e. 32, 8, 2 lengths partitions are made
-
-        Parameters
-        ----------
-        arrTime: array_like
-            input array in the time domain
-
-        Returns
-        -------
-        array_like
-            hilbert domain array
-        """
-        pool = Pool(os.cpu_count())
-        powers = decomposeArbitraryLength(len(arrTime))
-        offset = 0
-        arrHilbert = list()
-        arrTimeSliced = list()
-
-        # running for each decomposed array by power
-        for power in powers:
-            sliceIndex = int(scalb(1., power))
-            arrTimeSliced.append(arrTime[offset: (offset + sliceIndex)])
-
-        result = pool.map(self.waveDec, arrTimeSliced)
-
-        [arrHilbert.extend(res) for res in result]
-
-        return arrHilbert
-
     def __waveRecAncientEgyptian(self, arrHilbert):
         """
         Wavelet reconstruction for data of arbitrary length
@@ -181,6 +138,7 @@ class FastWaveletTransform(BaseTransform):
         array_like
             hilbert time array
         """
+
         arrTime = list()
         powers = decomposeArbitraryLength(len(arrHilbert))
         offset = 0

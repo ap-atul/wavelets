@@ -42,8 +42,8 @@ class Wavelet:
                 k = (i << 1) + j
 
                 # circulate the array if scale is higher
-                while k >= len(arrHilbert):
-                    k -= len(arrHilbert)
+                while k >= level:
+                    k -= level
 
                 arrHilbert[i] += arrTime[k] * self.__wavelet__.decompositionLowFilter[j]
                 arrHilbert[i + a] += arrTime[k] * self.__wavelet__.decompositionHighFilter[j]
@@ -75,8 +75,8 @@ class Wavelet:
                 k = (i << 1) + j
 
                 # circulating the array if scale is higher
-                while k >= len(arrTime):
-                    k -= len(arrTime)
+                while k >= level:
+                    k -= level
 
                 arrTime[k] += (arrHilbert[i] * self.__wavelet__.reconstructionLowFilter[j] +
                                arrHilbert[i + a] * self.__wavelet__.reconstructionHighFilter[j])

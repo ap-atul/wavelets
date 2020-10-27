@@ -4,7 +4,7 @@ import numpy as np
 import soundfile
 
 from wavelet.fast_transform import FastWaveletTransform
-from wavelet.util.utility import getExponent, threshold, mad
+from wavelet.util import getExponent, threshold, mad
 
 inputFile = "../example/input.wav"
 outputFile = "../example/input_denoised.wav"

@@ -1,3 +1,4 @@
+import time
 import unittest
 
 import numpy as np
@@ -9,12 +10,14 @@ from wavelet.wavelets import getAllWavelets
 class MyTestCase(unittest.TestCase):
     def test_something(self):
         for wavelet in getAllWavelets():
+            start = time.time()
             t = FastWaveletTransform(wavelet)
+            data = np.random.uniform(0, 1, 1000000)
+            t.waveDec(data)
+            end = time.time()
 
-            print(f"Running for {wavelet}")
-            data = np.random.uniform(0, 5, 100000)
-            coefficients = t.waveDec(data)
-            clean = t.waveRec(coefficients)
+            print(f"Time taken {wavelet} :: {end - start} s")
+        print()
 
         self.assertEqual(True, True)
 

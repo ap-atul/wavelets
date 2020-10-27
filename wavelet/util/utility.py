@@ -4,7 +4,7 @@ from math import log, pow
 
 import numpy as np
 
-from wavelet.exceptions.custom import WaveletException
+from wavelet.exceptions import WaveletException
 
 
 def getExponent(value):
@@ -47,8 +47,7 @@ def decomposeArbitraryLength(number):
         current = current - scalb(1., power)
         position += 1
 
-    ancientEgyptianMultipliers = tempArray[:position]
-    return ancientEgyptianMultipliers
+    return tempArray[:position]
 
 
 def threshold(data, value, substitute=0):

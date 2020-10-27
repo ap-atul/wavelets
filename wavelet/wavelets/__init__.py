@@ -1,10 +1,11 @@
 """Maps the wavelet name to the Wavelet Class object"""
 
-from wavelet.exceptions.custom import WaveletImplementationMissing
-from wavelet.wavelets import db4, haar
+from wavelet.exceptions import WaveletImplementationMissing
+from wavelet.wavelets import (db2, db4, haar)
 
 # all wavelets go here
 wavelet = {
+    "db2": db2.Daubechies2,
     "db4": db4.Daubechies4,
     "haar": haar.Haar
 }
@@ -43,4 +44,4 @@ def getAllWavelets():
     list
         list of all the wavelets
     """
-    return wavelet.keys()
+    return list(wavelet.keys())

@@ -2,9 +2,9 @@
 
 import numpy as np
 
-from wavelet.exceptions.custom import WrongLengthsOfData
+from wavelet.exceptions import WrongLengthsOfData
 from wavelet.transforms.wavelet import Wavelet
-from wavelet.util.utility import getExponent, isPowerOf2
+from wavelet.util import getExponent, isPowerOf2
 from wavelet.wavelets import getAllWavelets
 
 
@@ -43,7 +43,7 @@ class BaseTransform:
         list
             list of all wavelets
         """
-        return list(getAllWavelets())
+        return getAllWavelets()
 
     def waveDec1(self, arrTime, level):
         """
@@ -110,7 +110,7 @@ class BaseTransform:
 
     def waveDec2(self, matTime):
         """
-        Two Dimension wavelet decomposition based on the levels
+        Two Dimension Multi-level wavelet decomposition based on the levels
 
         Parameters
         ----------
@@ -149,7 +149,7 @@ class BaseTransform:
 
     def waveRec2(self, matHilbert):
         """
-        Two Dimension wavelet reconstruction based on the levels
+        Two Dimension Multi-level wavelet reconstruction based on the levels
 
         Parameters
         ----------
