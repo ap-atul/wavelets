@@ -9,9 +9,7 @@ data = [[1, 1, 1, 1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1, 1, 1, 1]]
 
-print(data)
-
 # decomposition --> reconstruction
-coefficients = t.waveDec(data)
-data = t.waveRec(coefficients)
+coefficients = t.waveDec2(data)
+data = t.waveRec2(coefficients)
 print(data)

@@ -46,7 +46,15 @@ class WaveletImplementationMissing(Exception):
     This exception will be raised when unknown wavelet name is provided for
     transform object. When the wavelet implementation is missing
     &#34;&#34;&#34;
-    __cause__ = &#34;The implementation for the requested wavelet is missing!&#34;</code></pre>
+    __cause__ = &#34;The implementation for the requested wavelet is missing!&#34;
+
+
+class WaveletException(Exception):
+    &#34;&#34;&#34;
+    This exception will be raised when something goes wrong with calculations
+    or validations with message added at the runtime
+    &#34;&#34;&#34;
+    pass</code></pre>
             </details>
         </section>
         <section>
@@ -58,6 +66,30 @@ class WaveletImplementationMissing(Exception):
         <section>
             <h2 class="section-title" id="header-classes">Classes</h2>
             <dl>
+                <dt id="wavelet.exceptions.custom.WaveletException"><code class="flex name class">
+                    <span>class <span class="ident">WaveletException</span></span>
+                    <span>(</span><span>*args, **kwargs)</span>
+                </code></dt>
+                <dd>
+                    <div class="desc"><p>This exception will be raised when something goes wrong with calculations
+                        or validations with message added at the runtime</p></div>
+                    <details class="source">
+                        <summary>
+                            <span>Expand source code</span>
+                        </summary>
+                        <pre><code class="python">class WaveletException(Exception):
+    &#34;&#34;&#34;
+    This exception will be raised when something goes wrong with calculations
+    or validations with message added at the runtime
+    &#34;&#34;&#34;
+    pass</code></pre>
+                    </details>
+                    <h3>Ancestors</h3>
+                    <ul class="hlist">
+                        <li>builtins.Exception</li>
+                        <li>builtins.BaseException</li>
+                    </ul>
+                </dd>
                 <dt id="wavelet.exceptions.custom.WaveletImplementationMissing"><code class="flex name class">
                     <span>class <span class="ident">WaveletImplementationMissing</span></span>
                     <span>(</span><span>*args, **kwargs)</span>
@@ -98,6 +130,10 @@ class WaveletImplementationMissing(Exception):
             </li>
             <li><h3><a href="#header-classes">Classes</a></h3>
                 <ul>
+                    <li>
+                        <h4><code><a href="#wavelet.exceptions.custom.WaveletException"
+                                     title="wavelet.exceptions.custom.WaveletException">WaveletException</a></code></h4>
+                    </li>
                     <li>
                         <h4><code><a href="#wavelet.exceptions.custom.WaveletImplementationMissing"
                                      title="wavelet.exceptions.custom.WaveletImplementationMissing">WaveletImplementationMissing</a></code>
