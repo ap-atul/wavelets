@@ -38,7 +38,7 @@ for wavelet in getAllWavelets():
                 thresh = sigma * np.sqrt(2 * np.log(len(block)))
 
                 # thresholding using the noise threshold generated
-                coefficients[0:] = threshold(coefficients, thresh)
+                coefficients = threshold(coefficients, thresh)
 
                 # getting the clean signal as in original form and writing to the file
                 clean = t.waveRec(coefficients)

@@ -73,8 +73,8 @@ The performance can be improved. Help to make it even better by contributing
 ```console
 $ git clone https://github.com/AP-Atul/Wavelets.git
 ```
-2. Run the run.py file
+2. Install the package
 ```console
-$ python run.py
+python setup.py install
 ```
 

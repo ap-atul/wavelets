@@ -16,6 +16,7 @@ expo = getExponent(len(data))
 s = math.pow(2, expo)
 
 t = FastWaveletTransform(waveletName='haar')
+print(t.getAllWaveletDefinition().__name__)
 coefficients = t.waveDec(data[: int(s)])
 
 # calculating noise threshold value
