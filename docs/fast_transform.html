@@ -42,8 +42,8 @@
 
 import numpy as np
 
-from wavelet.transforms.base_transform import BaseTransform
-from wavelet.util.utility import getExponent, isPowerOf2, decomposeArbitraryLength, scalb
+from wavelet.transforms import BaseTransform
+from wavelet.util import getExponent, isPowerOf2, decomposeArbitraryLength, scalb
 
 
 class FastWaveletTransform(BaseTransform):
@@ -69,7 +69,7 @@ class FastWaveletTransform(BaseTransform):
         array_like
             Time domain
         &#34;&#34;&#34;
-        arrHilbert = np.array(arrHilbert)
+        arrHilbert = np.array(arrHilbert, dtype=np.float_)
         dimensions = np.ndim(arrHilbert)
 
         # checking if the data is not of arbitrary length
@@ -82,7 +82,7 @@ class FastWaveletTransform(BaseTransform):
             level = getExponent(len(arrHilbert))
             return self.waveRec1(list(arrHilbert), level)
         elif dimensions == 2:
-            return self.waveRec2(list(arrHilbert))
+            return self.waveRec2(arrHilbert)
 
     def waveDec(self, arrTime):
         &#34;&#34;&#34;
@@ -98,7 +98,7 @@ class FastWaveletTransform(BaseTransform):
         array_like
             Hilbert domain
         &#34;&#34;&#34;
-        arrTime = np.array(arrTime)
+        arrTime = np.array(arrTime, dtype=np.float_)
         dimensions = np.ndim(arrTime)
 
         # checking if the data is not of arbitrary length
@@ -113,7 +113,7 @@ class FastWaveletTransform(BaseTransform):
             return self.waveDec1(list(arrTime), level)
 
         elif dimensions == 2:
-            return self.waveDec2(list(arrTime))
+            return self.waveDec2(arrTime)
 
     def __waveDecAncientEgyptian(self, arrTime):
         &#34;&#34;&#34;
@@ -148,8 +148,7 @@ class FastWaveletTransform(BaseTransform):
             arrTimeSliced = arrTime[offset: (offset + sliceIndex)]
 
             # run the wavelet decomposition for the slice
-            arrHilbertSliced = self.waveDec(arrTimeSliced)
-            arrHilbert.extend(arrHilbertSliced)
+            arrHilbert.extend(self.waveDec(arrTimeSliced))
 
             # incrementing the offset
             offset += sliceIndex
@@ -179,6 +178,7 @@ class FastWaveletTransform(BaseTransform):
         array_like
             hilbert time array
         &#34;&#34;&#34;
+
         arrTime = list()
         powers = decomposeArbitraryLength(len(arrHilbert))
         offset = 0
@@ -241,7 +241,7 @@ class FastWaveletTransform(BaseTransform):
         array_like
             Time domain
         &#34;&#34;&#34;
-        arrHilbert = np.array(arrHilbert)
+        arrHilbert = np.array(arrHilbert, dtype=np.float_)
         dimensions = np.ndim(arrHilbert)
 
         # checking if the data is not of arbitrary length
@@ -254,7 +254,7 @@ class FastWaveletTransform(BaseTransform):
             level = getExponent(len(arrHilbert))
             return self.waveRec1(list(arrHilbert), level)
         elif dimensions == 2:
-            return self.waveRec2(list(arrHilbert))
+            return self.waveRec2(arrHilbert)
 
     def waveDec(self, arrTime):
         &#34;&#34;&#34;
@@ -270,7 +270,7 @@ class FastWaveletTransform(BaseTransform):
         array_like
             Hilbert domain
         &#34;&#34;&#34;
-        arrTime = np.array(arrTime)
+        arrTime = np.array(arrTime, dtype=np.float_)
         dimensions = np.ndim(arrTime)
 
         # checking if the data is not of arbitrary length
@@ -285,7 +285,7 @@ class FastWaveletTransform(BaseTransform):
             return self.waveDec1(list(arrTime), level)
 
         elif dimensions == 2:
-            return self.waveDec2(list(arrTime))
+            return self.waveDec2(arrTime)
 
     def __waveDecAncientEgyptian(self, arrTime):
         &#34;&#34;&#34;
@@ -320,8 +320,7 @@ class FastWaveletTransform(BaseTransform):
             arrTimeSliced = arrTime[offset: (offset + sliceIndex)]
 
             # run the wavelet decomposition for the slice
-            arrHilbertSliced = self.waveDec(arrTimeSliced)
-            arrHilbert.extend(arrHilbertSliced)
+            arrHilbert.extend(self.waveDec(arrTimeSliced))
 
             # incrementing the offset
             offset += sliceIndex
@@ -351,6 +350,7 @@ class FastWaveletTransform(BaseTransform):
         array_like
             hilbert time array
         &#34;&#34;&#34;
+
         arrTime = list()
         powers = decomposeArbitraryLength(len(arrHilbert))
         offset = 0
@@ -410,7 +410,7 @@ class FastWaveletTransform(BaseTransform):
     array_like
         Hilbert domain
     &#34;&#34;&#34;
-    arrTime = np.array(arrTime)
+    arrTime = np.array(arrTime, dtype=np.float_)
     dimensions = np.ndim(arrTime)
 
     # checking if the data is not of arbitrary length
@@ -425,7 +425,7 @@ class FastWaveletTransform(BaseTransform):
         return self.waveDec1(list(arrTime), level)
 
     elif dimensions == 2:
-        return self.waveDec2(list(arrTime))</code></pre>
+        return self.waveDec2(arrTime)</code></pre>
                             </details>
                         </dd>
                         <dt id="wavelet.fast_transform.FastWaveletTransform.waveRec"><code class="name flex">
@@ -462,7 +462,7 @@ class FastWaveletTransform(BaseTransform):
     array_like
         Time domain
     &#34;&#34;&#34;
-    arrHilbert = np.array(arrHilbert)
+    arrHilbert = np.array(arrHilbert, dtype=np.float_)
     dimensions = np.ndim(arrHilbert)
 
     # checking if the data is not of arbitrary length
@@ -475,7 +475,7 @@ class FastWaveletTransform(BaseTransform):
         level = getExponent(len(arrHilbert))
         return self.waveRec1(list(arrHilbert), level)
     elif dimensions == 2:
-        return self.waveRec2(list(arrHilbert))</code></pre>
+        return self.waveRec2(arrHilbert)</code></pre>
                             </details>
                         </dd>
                     </dl>

@@ -40,12 +40,53 @@
                 </summary>
                 <pre><code class="python">&#34;&#34;&#34;Maps the wavelet name to the Wavelet Class object&#34;&#34;&#34;
 
-from wavelet.exceptions.custom import WaveletImplementationMissing
-from wavelet.wavelets import db4, haar
+from wavelet.exceptions import WaveletImplementationMissing
+from wavelet.wavelets import (db2, db3, db4, db5, db6, db7, db8, db9, db10,
+                              db11, db12, db13, db14, db15, db16, db17, db18, db19, db20,
+                              sym2, sym3, sym4, sym5, sym6, sym7, sym8, sym9, sym10,
+                              sym11, sym12, sym13, sym14, sym15, sym16, sym17, sym18, sym19, sym20,
+                              haar)
 
 # all wavelets go here
 wavelet = {
+    &#34;db2&#34;: db2.Daubechies2,
+    &#34;db3&#34;: db3.Daubechies3,
     &#34;db4&#34;: db4.Daubechies4,
+    &#34;db5&#34;: db5.Daubechies5,
+    &#34;db6&#34;: db6.Daubechies6,
+    &#34;db7&#34;: db7.Daubechies7,
+    &#34;db8&#34;: db8.Daubechies8,
+    &#34;db9&#34;: db9.Daubechies9,
+    &#34;db10&#34;: db10.Daubechies10,
+    &#34;db11&#34;: db11.Daubechies11,
+    &#34;db12&#34;: db12.Daubechies12,
+    &#34;db13&#34;: db13.Daubechies13,
+    &#34;db14&#34;: db14.Daubechies14,
+    &#34;db15&#34;: db15.Daubechies15,
+    &#34;db16&#34;: db16.Daubechies16,
+    &#34;db17&#34;: db17.Daubechies17,
+    &#34;db18&#34;: db18.Daubechies18,
+    &#34;db19&#34;: db19.Daubechies19,
+    &#34;db20&#34;: db20.Daubechies20,
+    &#34;sym2&#34;: sym2.Symlet2,
+    &#34;sym3&#34;: sym3.Symlet3,
+    &#34;sym4&#34;: sym4.Symlet4,
+    &#34;sym5&#34;: sym5.Symlet5,
+    &#34;sym6&#34;: sym6.Symlet6,
+    &#34;sym7&#34;: sym7.Symlet7,
+    &#34;sym8&#34;: sym8.Symlet8,
+    &#34;sym9&#34;: sym9.Symlet9,
+    &#34;sym10&#34;: sym10.Symlet10,
+    &#34;sym11&#34;: sym11.Symlet11,
+    &#34;sym12&#34;: sym12.Symlet12,
+    &#34;sym13&#34;: sym13.Symlet13,
+    &#34;sym14&#34;: sym14.Symlet14,
+    &#34;sym15&#34;: sym15.Symlet15,
+    &#34;sym16&#34;: sym16.Symlet16,
+    &#34;sym17&#34;: sym17.Symlet17,
+    &#34;sym18&#34;: sym18.Symlet18,
+    &#34;sym19&#34;: sym19.Symlet19,
+    &#34;sym20&#34;: sym20.Symlet20,
     &#34;haar&#34;: haar.Haar
 }
 
@@ -83,21 +124,206 @@ def getAllWavelets():
     list
         list of all the wavelets
     &#34;&#34;&#34;
-    return wavelet.keys()</code></pre>
+    return list(wavelet.keys())</code></pre>
             </details>
         </section>
         <section>
             <h2 class="section-title" id="header-submodules">Sub-modules</h2>
             <dl>
+                <dt><code class="name"><a href="db10.html"
+                                          title="wavelet.wavelets.db10">wavelet.wavelets.db10</a></code></dt>
+                <dd>
+                    <div class="desc"><p>Daubechies 10 wavelet</p></div>
+                </dd>
+                <dt><code class="name"><a href="db11.html"
+                                          title="wavelet.wavelets.db11">wavelet.wavelets.db11</a></code></dt>
+                <dd>
+                    <div class="desc"><p>Daubechies 11 wavelet</p></div>
+                </dd>
+                <dt><code class="name"><a href="db12.html"
+                                          title="wavelet.wavelets.db12">wavelet.wavelets.db12</a></code></dt>
+                <dd>
+                    <div class="desc"><p>Daubechies 12 wavelet</p></div>
+                </dd>
+                <dt><code class="name"><a href="db13.html"
+                                          title="wavelet.wavelets.db13">wavelet.wavelets.db13</a></code></dt>
+                <dd>
+                    <div class="desc"><p>Daubechies 13 wavelet</p></div>
+                </dd>
+                <dt><code class="name"><a href="db14.html"
+                                          title="wavelet.wavelets.db14">wavelet.wavelets.db14</a></code></dt>
+                <dd>
+                    <div class="desc"><p>Daubechies 14 wavelet</p></div>
+                </dd>
+                <dt><code class="name"><a href="db15.html"
+                                          title="wavelet.wavelets.db15">wavelet.wavelets.db15</a></code></dt>
+                <dd>
+                    <div class="desc"><p>Daubechies 15 wavelet</p></div>
+                </dd>
+                <dt><code class="name"><a href="db16.html"
+                                          title="wavelet.wavelets.db16">wavelet.wavelets.db16</a></code></dt>
+                <dd>
+                    <div class="desc"><p>Daubechies 16 wavelet</p></div>
+                </dd>
+                <dt><code class="name"><a href="db17.html"
+                                          title="wavelet.wavelets.db17">wavelet.wavelets.db17</a></code></dt>
+                <dd>
+                    <div class="desc"><p>Daubechies 17 wavelet</p></div>
+                </dd>
+                <dt><code class="name"><a href="db18.html"
+                                          title="wavelet.wavelets.db18">wavelet.wavelets.db18</a></code></dt>
+                <dd>
+                    <div class="desc"><p>Daubechies 18 wavelet</p></div>
+                </dd>
+                <dt><code class="name"><a href="db19.html"
+                                          title="wavelet.wavelets.db19">wavelet.wavelets.db19</a></code></dt>
+                <dd>
+                    <div class="desc"><p>Daubechies 19 wavelet</p></div>
+                </dd>
+                <dt><code class="name"><a href="db2.html" title="wavelet.wavelets.db2">wavelet.wavelets.db2</a></code>
+                </dt>
+                <dd>
+                    <div class="desc"><p>Daubechies 2 wavelet</p></div>
+                </dd>
+                <dt><code class="name"><a href="db20.html"
+                                          title="wavelet.wavelets.db20">wavelet.wavelets.db20</a></code></dt>
+                <dd>
+                    <div class="desc"><p>Daubechies 20 wavelet</p></div>
+                </dd>
+                <dt><code class="name"><a href="db3.html" title="wavelet.wavelets.db3">wavelet.wavelets.db3</a></code>
+                </dt>
+                <dd>
+                    <div class="desc"><p>Daubechies 3 wavelet</p></div>
+                </dd>
                 <dt><code class="name"><a href="db4.html" title="wavelet.wavelets.db4">wavelet.wavelets.db4</a></code>
                 </dt>
                 <dd>
                     <div class="desc"><p>Daubechies 4 wavelet</p></div>
                 </dd>
+                <dt><code class="name"><a href="db5.html" title="wavelet.wavelets.db5">wavelet.wavelets.db5</a></code>
+                </dt>
+                <dd>
+                    <div class="desc"><p>Daubechies 5 wavelet</p></div>
+                </dd>
+                <dt><code class="name"><a href="db6.html" title="wavelet.wavelets.db6">wavelet.wavelets.db6</a></code>
+                </dt>
+                <dd>
+                    <div class="desc"><p>Daubechies 6 wavelet</p></div>
+                </dd>
+                <dt><code class="name"><a href="db7.html" title="wavelet.wavelets.db7">wavelet.wavelets.db7</a></code>
+                </dt>
+                <dd>
+                    <div class="desc"><p>Daubechies 7 wavelet</p></div>
+                </dd>
+                <dt><code class="name"><a href="db8.html" title="wavelet.wavelets.db8">wavelet.wavelets.db8</a></code>
+                </dt>
+                <dd>
+                    <div class="desc"><p>Daubechies 8 wavelet</p></div>
+                </dd>
+                <dt><code class="name"><a href="db9.html" title="wavelet.wavelets.db9">wavelet.wavelets.db9</a></code>
+                </dt>
+                <dd>
+                    <div class="desc"><p>Daubechies 9 wavelet</p></div>
+                </dd>
                 <dt><code class="name"><a href="haar.html"
                                           title="wavelet.wavelets.haar">wavelet.wavelets.haar</a></code></dt>
                 <dd>
                     <div class="desc"><p>Haar Wavelet</p></div>
+                </dd>
+                <dt><code class="name"><a href="sym10.html"
+                                          title="wavelet.wavelets.sym10">wavelet.wavelets.sym10</a></code></dt>
+                <dd>
+                    <div class="desc"><p>Symlet 10 wavelet</p></div>
+                </dd>
+                <dt><code class="name"><a href="sym11.html"
+                                          title="wavelet.wavelets.sym11">wavelet.wavelets.sym11</a></code></dt>
+                <dd>
+                    <div class="desc"><p>Symlet 11 wavelet</p></div>
+                </dd>
+                <dt><code class="name"><a href="sym12.html"
+                                          title="wavelet.wavelets.sym12">wavelet.wavelets.sym12</a></code></dt>
+                <dd>
+                    <div class="desc"><p>Symlet 12 wavelet</p></div>
+                </dd>
+                <dt><code class="name"><a href="sym13.html"
+                                          title="wavelet.wavelets.sym13">wavelet.wavelets.sym13</a></code></dt>
+                <dd>
+                    <div class="desc"><p>Symlet 13 wavelet</p></div>
+                </dd>
+                <dt><code class="name"><a href="sym14.html"
+                                          title="wavelet.wavelets.sym14">wavelet.wavelets.sym14</a></code></dt>
+                <dd>
+                    <div class="desc"><p>Symlet 14 wavelet</p></div>
+                </dd>
+                <dt><code class="name"><a href="sym15.html"
+                                          title="wavelet.wavelets.sym15">wavelet.wavelets.sym15</a></code></dt>
+                <dd>
+                    <div class="desc"><p>Symlet 15 wavelet</p></div>
+                </dd>
+                <dt><code class="name"><a href="sym16.html"
+                                          title="wavelet.wavelets.sym16">wavelet.wavelets.sym16</a></code></dt>
+                <dd>
+                    <div class="desc"><p>Symlet 16 wavelet</p></div>
+                </dd>
+                <dt><code class="name"><a href="sym17.html"
+                                          title="wavelet.wavelets.sym17">wavelet.wavelets.sym17</a></code></dt>
+                <dd>
+                    <div class="desc"><p>Symlet 17 wavelet</p></div>
+                </dd>
+                <dt><code class="name"><a href="sym18.html"
+                                          title="wavelet.wavelets.sym18">wavelet.wavelets.sym18</a></code></dt>
+                <dd>
+                    <div class="desc"><p>Symlet 18 wavelet</p></div>
+                </dd>
+                <dt><code class="name"><a href="sym19.html"
+                                          title="wavelet.wavelets.sym19">wavelet.wavelets.sym19</a></code></dt>
+                <dd>
+                    <div class="desc"><p>Symlet 19 wavelet</p></div>
+                </dd>
+                <dt><code class="name"><a href="sym2.html"
+                                          title="wavelet.wavelets.sym2">wavelet.wavelets.sym2</a></code></dt>
+                <dd>
+                    <div class="desc"><p>Symlet 2 wavelet</p></div>
+                </dd>
+                <dt><code class="name"><a href="sym20.html"
+                                          title="wavelet.wavelets.sym20">wavelet.wavelets.sym20</a></code></dt>
+                <dd>
+                    <div class="desc"><p>Symlet 20 wavelet</p></div>
+                </dd>
+                <dt><code class="name"><a href="sym3.html"
+                                          title="wavelet.wavelets.sym3">wavelet.wavelets.sym3</a></code></dt>
+                <dd>
+                    <div class="desc"><p>Symlet 3 wavelet</p></div>
+                </dd>
+                <dt><code class="name"><a href="sym4.html"
+                                          title="wavelet.wavelets.sym4">wavelet.wavelets.sym4</a></code></dt>
+                <dd>
+                    <div class="desc"><p>Symlet 4 wavelet</p></div>
+                </dd>
+                <dt><code class="name"><a href="sym5.html"
+                                          title="wavelet.wavelets.sym5">wavelet.wavelets.sym5</a></code></dt>
+                <dd>
+                    <div class="desc"><p>Symlet 5 wavelet</p></div>
+                </dd>
+                <dt><code class="name"><a href="sym6.html"
+                                          title="wavelet.wavelets.sym6">wavelet.wavelets.sym6</a></code></dt>
+                <dd>
+                    <div class="desc"><p>Symlet 6 wavelet</p></div>
+                </dd>
+                <dt><code class="name"><a href="sym7.html"
+                                          title="wavelet.wavelets.sym7">wavelet.wavelets.sym7</a></code></dt>
+                <dd>
+                    <div class="desc"><p>Symlet 7 wavelet</p></div>
+                </dd>
+                <dt><code class="name"><a href="sym8.html"
+                                          title="wavelet.wavelets.sym8">wavelet.wavelets.sym8</a></code></dt>
+                <dd>
+                    <div class="desc"><p>Symlet 8 wavelet</p></div>
+                </dd>
+                <dt><code class="name"><a href="sym9.html"
+                                          title="wavelet.wavelets.sym9">wavelet.wavelets.sym9</a></code></dt>
+                <dd>
+                    <div class="desc"><p>Symlet 9 wavelet</p></div>
                 </dd>
             </dl>
         </section>
@@ -130,7 +356,7 @@ def getAllWavelets():
     list
         list of all the wavelets
     &#34;&#34;&#34;
-    return wavelet.keys()</code></pre>
+    return list(wavelet.keys())</code></pre>
                     </details>
                 </dd>
                 <dt id="wavelet.wavelets.getWaveletDefinition"><code class="name flex">
@@ -200,8 +426,45 @@ def getAllWavelets():
             </li>
             <li><h3><a href="#header-submodules">Sub-modules</a></h3>
                 <ul>
+                    <li><code><a href="db10.html" title="wavelet.wavelets.db10">wavelet.wavelets.db10</a></code></li>
+                    <li><code><a href="db11.html" title="wavelet.wavelets.db11">wavelet.wavelets.db11</a></code></li>
+                    <li><code><a href="db12.html" title="wavelet.wavelets.db12">wavelet.wavelets.db12</a></code></li>
+                    <li><code><a href="db13.html" title="wavelet.wavelets.db13">wavelet.wavelets.db13</a></code></li>
+                    <li><code><a href="db14.html" title="wavelet.wavelets.db14">wavelet.wavelets.db14</a></code></li>
+                    <li><code><a href="db15.html" title="wavelet.wavelets.db15">wavelet.wavelets.db15</a></code></li>
+                    <li><code><a href="db16.html" title="wavelet.wavelets.db16">wavelet.wavelets.db16</a></code></li>
+                    <li><code><a href="db17.html" title="wavelet.wavelets.db17">wavelet.wavelets.db17</a></code></li>
+                    <li><code><a href="db18.html" title="wavelet.wavelets.db18">wavelet.wavelets.db18</a></code></li>
+                    <li><code><a href="db19.html" title="wavelet.wavelets.db19">wavelet.wavelets.db19</a></code></li>
+                    <li><code><a href="db2.html" title="wavelet.wavelets.db2">wavelet.wavelets.db2</a></code></li>
+                    <li><code><a href="db20.html" title="wavelet.wavelets.db20">wavelet.wavelets.db20</a></code></li>
+                    <li><code><a href="db3.html" title="wavelet.wavelets.db3">wavelet.wavelets.db3</a></code></li>
                     <li><code><a href="db4.html" title="wavelet.wavelets.db4">wavelet.wavelets.db4</a></code></li>
+                    <li><code><a href="db5.html" title="wavelet.wavelets.db5">wavelet.wavelets.db5</a></code></li>
+                    <li><code><a href="db6.html" title="wavelet.wavelets.db6">wavelet.wavelets.db6</a></code></li>
+                    <li><code><a href="db7.html" title="wavelet.wavelets.db7">wavelet.wavelets.db7</a></code></li>
+                    <li><code><a href="db8.html" title="wavelet.wavelets.db8">wavelet.wavelets.db8</a></code></li>
+                    <li><code><a href="db9.html" title="wavelet.wavelets.db9">wavelet.wavelets.db9</a></code></li>
                     <li><code><a href="haar.html" title="wavelet.wavelets.haar">wavelet.wavelets.haar</a></code></li>
+                    <li><code><a href="sym10.html" title="wavelet.wavelets.sym10">wavelet.wavelets.sym10</a></code></li>
+                    <li><code><a href="sym11.html" title="wavelet.wavelets.sym11">wavelet.wavelets.sym11</a></code></li>
+                    <li><code><a href="sym12.html" title="wavelet.wavelets.sym12">wavelet.wavelets.sym12</a></code></li>
+                    <li><code><a href="sym13.html" title="wavelet.wavelets.sym13">wavelet.wavelets.sym13</a></code></li>
+                    <li><code><a href="sym14.html" title="wavelet.wavelets.sym14">wavelet.wavelets.sym14</a></code></li>
+                    <li><code><a href="sym15.html" title="wavelet.wavelets.sym15">wavelet.wavelets.sym15</a></code></li>
+                    <li><code><a href="sym16.html" title="wavelet.wavelets.sym16">wavelet.wavelets.sym16</a></code></li>
+                    <li><code><a href="sym17.html" title="wavelet.wavelets.sym17">wavelet.wavelets.sym17</a></code></li>
+                    <li><code><a href="sym18.html" title="wavelet.wavelets.sym18">wavelet.wavelets.sym18</a></code></li>
+                    <li><code><a href="sym19.html" title="wavelet.wavelets.sym19">wavelet.wavelets.sym19</a></code></li>
+                    <li><code><a href="sym2.html" title="wavelet.wavelets.sym2">wavelet.wavelets.sym2</a></code></li>
+                    <li><code><a href="sym20.html" title="wavelet.wavelets.sym20">wavelet.wavelets.sym20</a></code></li>
+                    <li><code><a href="sym3.html" title="wavelet.wavelets.sym3">wavelet.wavelets.sym3</a></code></li>
+                    <li><code><a href="sym4.html" title="wavelet.wavelets.sym4">wavelet.wavelets.sym4</a></code></li>
+                    <li><code><a href="sym5.html" title="wavelet.wavelets.sym5">wavelet.wavelets.sym5</a></code></li>
+                    <li><code><a href="sym6.html" title="wavelet.wavelets.sym6">wavelet.wavelets.sym6</a></code></li>
+                    <li><code><a href="sym7.html" title="wavelet.wavelets.sym7">wavelet.wavelets.sym7</a></code></li>
+                    <li><code><a href="sym8.html" title="wavelet.wavelets.sym8">wavelet.wavelets.sym8</a></code></li>
+                    <li><code><a href="sym9.html" title="wavelet.wavelets.sym9">wavelet.wavelets.sym9</a></code></li>
                 </ul>
             </li>
             <li><h3><a href="#header-functions">Functions</a></h3>

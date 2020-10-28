@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1, minimum-scale=1" name="viewport"/>
     <meta content="pdoc 0.9.1" name="generator"/>
-    <title>wavelet.exceptions.custom API documentation</title>
-    <meta content="All custom exceptions" name="description"/>
+    <title>wavelet.wavelets.db2 API documentation</title>
+    <meta content="Daubechies 2 wavelet" name="description"/>
     <link as="style" crossorigin href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css"
           integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" rel="preload stylesheet">
     <link as="style" crossorigin
@@ -30,41 +30,62 @@
 <main>
     <article id="content">
         <header>
-            <h1 class="title">Module <code>wavelet.exceptions.custom</code></h1>
+            <h1 class="title">Module <code>wavelet.wavelets.db2</code></h1>
         </header>
         <section id="section-intro">
-            <p>All custom exceptions</p>
+            <p>Daubechies 2 wavelet</p>
             <details class="source">
                 <summary>
                     <span>Expand source code</span>
                 </summary>
-                <pre><code class="python">&#34;&#34;&#34;All custom exceptions&#34;&#34;&#34;
+                <pre><code class="python">&#34;&#34;&#34; Daubechies 2 wavelet &#34;&#34;&#34;
 
 
-class WaveletImplementationMissing(Exception):
+class Daubechies2:
     &#34;&#34;&#34;
-    This exception will be raised when unknown wavelet name is provided for
-    transform object. When the wavelet implementation is missing
-    &#34;&#34;&#34;
-    __cause__ = &#34;The implementation for the requested wavelet is missing!&#34;
+    Properties
+    ----------
+    asymmetric, orthogonal, bi-orthogonal
 
+    All values are from http://wavelets.pybytes.com/wavelet/db2/
+    &#34;&#34;&#34;
+    __name__ = &#34;Daubechies Wavelet 2&#34;
+    __motherWaveletLength__ = 4  # length of the mother wavelet
+    __transformWaveletLength__ = 2  # minimum wavelength of input signal
 
-class WaveletException(Exception):
-    &#34;&#34;&#34;
-    This exception will be raised when something goes wrong with calculations
-    or validations with message added at the runtime
-    &#34;&#34;&#34;
-    pass
+    # decomposition filter
+    # low-pass
+    decompositionLowFilter = [
+        -0.12940952255092145,
+        0.22414386804185735,
+        0.836516303737469,
+        0.48296291314469025
+    ]
 
+    # high-pass
+    decompositionHighFilter = [
+        -0.48296291314469025,
+        0.836516303737469,
+        - 0.22414386804185735,
+        - 0.12940952255092145,
+    ]
 
-class WrongLengthsOfData(Exception):
-    &#34;&#34;&#34;
-    This exception will be raised when any dimension length of data is not a
-    power of 2, the solution to use the Ancient Egyptian with flatten will be
-    indicated
-    &#34;&#34;&#34;
-    __cause__ = &#34;The length of the dimensions of data is not power of 2, use np.array(data).flatten().&#34; \
-                &#34;Store the shape and reshape at the end&#34;</code></pre>
+    # reconstruction filters
+    # low pass
+    reconstructionLowFilter = [
+        0.48296291314469025,
+        0.836516303737469,
+        0.22414386804185735,
+        - 0.12940952255092145
+    ]
+
+    # high-pass
+    reconstructionHighFilter = [
+        -0.12940952255092145,
+        - 0.22414386804185735,
+        0.836516303737469,
+        - 0.48296291314469025
+    ]</code></pre>
             </details>
         </section>
         <section>
@@ -76,80 +97,87 @@ class WrongLengthsOfData(Exception):
         <section>
             <h2 class="section-title" id="header-classes">Classes</h2>
             <dl>
-                <dt id="wavelet.exceptions.custom.WaveletException"><code class="flex name class">
-                    <span>class <span class="ident">WaveletException</span></span>
-                    <span>(</span><span>*args, **kwargs)</span>
+                <dt id="wavelet.wavelets.db2.Daubechies2"><code class="flex name class">
+                    <span>class <span class="ident">Daubechies2</span></span>
                 </code></dt>
                 <dd>
-                    <div class="desc"><p>This exception will be raised when something goes wrong with calculations
-                        or validations with message added at the runtime</p></div>
+                    <div class="desc"><h2 id="properties">Properties</h2>
+                        <p>asymmetric, orthogonal, bi-orthogonal</p>
+                        <p>All values are from <a href="http://wavelets.pybytes.com/wavelet/db2/">http://wavelets.pybytes.com/wavelet/db2/</a>
+                        </p></div>
                     <details class="source">
                         <summary>
                             <span>Expand source code</span>
                         </summary>
-                        <pre><code class="python">class WaveletException(Exception):
+                        <pre><code class="python">class Daubechies2:
     &#34;&#34;&#34;
-    This exception will be raised when something goes wrong with calculations
-    or validations with message added at the runtime
+    Properties
+    ----------
+    asymmetric, orthogonal, bi-orthogonal
+
+    All values are from http://wavelets.pybytes.com/wavelet/db2/
     &#34;&#34;&#34;
-    pass</code></pre>
+    __name__ = &#34;Daubechies Wavelet 2&#34;
+    __motherWaveletLength__ = 4  # length of the mother wavelet
+    __transformWaveletLength__ = 2  # minimum wavelength of input signal
+
+    # decomposition filter
+    # low-pass
+    decompositionLowFilter = [
+        -0.12940952255092145,
+        0.22414386804185735,
+        0.836516303737469,
+        0.48296291314469025
+    ]
+
+    # high-pass
+    decompositionHighFilter = [
+        -0.48296291314469025,
+        0.836516303737469,
+        - 0.22414386804185735,
+        - 0.12940952255092145,
+    ]
+
+    # reconstruction filters
+    # low pass
+    reconstructionLowFilter = [
+        0.48296291314469025,
+        0.836516303737469,
+        0.22414386804185735,
+        - 0.12940952255092145
+    ]
+
+    # high-pass
+    reconstructionHighFilter = [
+        -0.12940952255092145,
+        - 0.22414386804185735,
+        0.836516303737469,
+        - 0.48296291314469025
+    ]</code></pre>
                     </details>
-                    <h3>Ancestors</h3>
-                    <ul class="hlist">
-                        <li>builtins.Exception</li>
-                        <li>builtins.BaseException</li>
-                    </ul>
-                </dd>
-                <dt id="wavelet.exceptions.custom.WaveletImplementationMissing"><code class="flex name class">
-                    <span>class <span class="ident">WaveletImplementationMissing</span></span>
-                    <span>(</span><span>*args, **kwargs)</span>
-                </code></dt>
-                <dd>
-                    <div class="desc"><p>This exception will be raised when unknown wavelet name is provided for
-                        transform object. When the wavelet implementation is missing</p></div>
-                    <details class="source">
-                        <summary>
-                            <span>Expand source code</span>
-                        </summary>
-                        <pre><code class="python">class WaveletImplementationMissing(Exception):
-    &#34;&#34;&#34;
-    This exception will be raised when unknown wavelet name is provided for
-    transform object. When the wavelet implementation is missing
-    &#34;&#34;&#34;
-    __cause__ = &#34;The implementation for the requested wavelet is missing!&#34;</code></pre>
-                    </details>
-                    <h3>Ancestors</h3>
-                    <ul class="hlist">
-                        <li>builtins.Exception</li>
-                        <li>builtins.BaseException</li>
-                    </ul>
-                </dd>
-                <dt id="wavelet.exceptions.custom.WrongLengthsOfData"><code class="flex name class">
-                    <span>class <span class="ident">WrongLengthsOfData</span></span>
-                    <span>(</span><span>*args, **kwargs)</span>
-                </code></dt>
-                <dd>
-                    <div class="desc"><p>This exception will be raised when any dimension length of data is not a
-                        power of 2, the solution to use the Ancient Egyptian with flatten will be
-                        indicated</p></div>
-                    <details class="source">
-                        <summary>
-                            <span>Expand source code</span>
-                        </summary>
-                        <pre><code class="python">class WrongLengthsOfData(Exception):
-    &#34;&#34;&#34;
-    This exception will be raised when any dimension length of data is not a
-    power of 2, the solution to use the Ancient Egyptian with flatten will be
-    indicated
-    &#34;&#34;&#34;
-    __cause__ = &#34;The length of the dimensions of data is not power of 2, use np.array(data).flatten().&#34; \
-                &#34;Store the shape and reshape at the end&#34;</code></pre>
-                    </details>
-                    <h3>Ancestors</h3>
-                    <ul class="hlist">
-                        <li>builtins.Exception</li>
-                        <li>builtins.BaseException</li>
-                    </ul>
+                    <h3>Class variables</h3>
+                    <dl>
+                        <dt id="wavelet.wavelets.db2.Daubechies2.decompositionHighFilter"><code class="name">var <span
+                                class="ident">decompositionHighFilter</span></code></dt>
+                        <dd>
+                            <div class="desc"></div>
+                        </dd>
+                        <dt id="wavelet.wavelets.db2.Daubechies2.decompositionLowFilter"><code class="name">var <span
+                                class="ident">decompositionLowFilter</span></code></dt>
+                        <dd>
+                            <div class="desc"></div>
+                        </dd>
+                        <dt id="wavelet.wavelets.db2.Daubechies2.reconstructionHighFilter"><code class="name">var <span
+                                class="ident">reconstructionHighFilter</span></code></dt>
+                        <dd>
+                            <div class="desc"></div>
+                        </dd>
+                        <dt id="wavelet.wavelets.db2.Daubechies2.reconstructionLowFilter"><code class="name">var <span
+                                class="ident">reconstructionLowFilter</span></code></dt>
+                        <dd>
+                            <div class="desc"></div>
+                        </dd>
+                    </dl>
                 </dd>
             </dl>
         </section>
@@ -162,24 +190,28 @@ class WrongLengthsOfData(Exception):
         <ul id="index">
             <li><h3>Super-module</h3>
                 <ul>
-                    <li><code><a href="index.html" title="wavelet.exceptions">wavelet.exceptions</a></code></li>
+                    <li><code><a href="index.html" title="wavelet.wavelets">wavelet.wavelets</a></code></li>
                 </ul>
             </li>
             <li><h3><a href="#header-classes">Classes</a></h3>
                 <ul>
                     <li>
-                        <h4><code><a href="#wavelet.exceptions.custom.WaveletException"
-                                     title="wavelet.exceptions.custom.WaveletException">WaveletException</a></code></h4>
-                    </li>
-                    <li>
-                        <h4><code><a href="#wavelet.exceptions.custom.WaveletImplementationMissing"
-                                     title="wavelet.exceptions.custom.WaveletImplementationMissing">WaveletImplementationMissing</a></code>
+                        <h4><code><a href="#wavelet.wavelets.db2.Daubechies2" title="wavelet.wavelets.db2.Daubechies2">Daubechies2</a></code>
                         </h4>
-                    </li>
-                    <li>
-                        <h4><code><a href="#wavelet.exceptions.custom.WrongLengthsOfData"
-                                     title="wavelet.exceptions.custom.WrongLengthsOfData">WrongLengthsOfData</a></code>
-                        </h4>
+                        <ul class="">
+                            <li><code><a href="#wavelet.wavelets.db2.Daubechies2.decompositionHighFilter"
+                                         title="wavelet.wavelets.db2.Daubechies2.decompositionHighFilter">decompositionHighFilter</a></code>
+                            </li>
+                            <li><code><a href="#wavelet.wavelets.db2.Daubechies2.decompositionLowFilter"
+                                         title="wavelet.wavelets.db2.Daubechies2.decompositionLowFilter">decompositionLowFilter</a></code>
+                            </li>
+                            <li><code><a href="#wavelet.wavelets.db2.Daubechies2.reconstructionHighFilter"
+                                         title="wavelet.wavelets.db2.Daubechies2.reconstructionHighFilter">reconstructionHighFilter</a></code>
+                            </li>
+                            <li><code><a href="#wavelet.wavelets.db2.Daubechies2.reconstructionLowFilter"
+                                         title="wavelet.wavelets.db2.Daubechies2.reconstructionLowFilter">reconstructionLowFilter</a></code>
+                            </li>
+                        </ul>
                     </li>
                 </ul>
             </li>

@@ -43,8 +43,9 @@
 
 import numpy as np
 
-from wavelet.transforms.wavelet import Wavelet
-from wavelet.util.utility import getExponent
+from wavelet.exceptions.custom import WrongLengthsOfData
+from wavelet.transforms.wavelet_transform import WaveletTransform
+from wavelet.util import getExponent, isPowerOf2
 from wavelet.wavelets import getAllWavelets
 
 
@@ -55,12 +56,12 @@ class BaseTransform:
 
     Attributes
     ----------
-    __wavelet: Wavelet
+    __wavelet: WaveletTransform
         object of the Wavelet class based on the wavelet name
     &#34;&#34;&#34;
 
     def __init__(self, waveletName):
-        self.__wavelet = Wavelet(waveletName)
+        self.__wavelet = WaveletTransform(waveletName)
 
     def getWaveletDefinition(self):
         &#34;&#34;&#34;
@@ -83,7 +84,7 @@ class BaseTransform:
         list
             list of all wavelets
         &#34;&#34;&#34;
-        return list(getAllWavelets())
+        return getAllWavelets()
 
     def waveDec1(self, arrTime, level):
         &#34;&#34;&#34;
@@ -101,8 +102,8 @@ class BaseTransform:
         array_like
             coefficients Frequency or the Hilbert domain
         &#34;&#34;&#34;
-        arrHilbert = arrTime
         length = 0
+        arrHilbert = arrTime.copy()
         dataLength = len(arrHilbert)
         transformWaveletLength = self.__wavelet.__wavelet__.__transformWaveletLength__
 
@@ -150,7 +151,7 @@ class BaseTransform:
 
     def waveDec2(self, matTime):
         &#34;&#34;&#34;
-        Two Dimension wavelet decomposition based on the levels
+        Two Dimension Multi-level wavelet decomposition based on the levels
 
         Parameters
         ----------
@@ -162,41 +163,34 @@ class BaseTransform:
         array_like
             coefficients Time domain
         &#34;&#34;&#34;
+        # shape
         noOfRows = len(matTime)
         noOfCols = len(matTime[0])
+
+        if not isPowerOf2(noOfRows) or not isPowerOf2(noOfCols):
+            raise WrongLengthsOfData(WrongLengthsOfData.__cause__)
+
+        # get the levels
         levelM = getExponent(noOfRows)
         levelN = getExponent(noOfCols)
 
-        matHilbert = [[0.] * noOfRows] * noOfCols
-        matHilbert = np.array(matHilbert).T
+        matHilbert = np.zeros(shape=(noOfRows, noOfCols))
 
         # rows
         for i in range(noOfRows):
-            arrTime = [0.] * noOfCols
-            for j in range(noOfCols):
-                arrTime[j] = matTime[i][j]
-
-            arrHilbert = self.waveDec1(arrTime, levelN)
-
-            for j in range(noOfCols):
-                matHilbert[i][j] = arrHilbert[j]
+            # run the decomposition on the row
+            matHilbert[i] = self.waveDec1(matTime[i], levelN)
 
         # cols
         for j in range(noOfCols):
-            arrTime = [0.] * noOfRows
-            for i in range(noOfRows):
-                arrTime[i] = matHilbert[i][j]
-
-            arrHilbert = self.waveDec1(arrTime, levelM)
-
-            for i in range(noOfRows):
-                matHilbert[i][j] = arrHilbert[i]
+            # run the decomposition on the col
+            matHilbert.T[j] = self.waveDec1(matHilbert.T[j], levelM)
 
         return matHilbert
 
     def waveRec2(self, matHilbert):
         &#34;&#34;&#34;
-        Two Dimension wavelet reconstruction based on the levels
+        Two Dimension Multi-level wavelet reconstruction based on the levels
 
         Parameters
         ----------
@@ -210,33 +204,23 @@ class BaseTransform:
         &#34;&#34;&#34;
         noOfRows = len(matHilbert)
         noOfCols = len(matHilbert[0])
+
+        # getting the levels
         levelM = getExponent(noOfRows)
         levelN = getExponent(noOfCols)
 
-        matTime = [[0.] * noOfRows] * noOfCols
-        matTime = np.array(matTime).T
+        matHilbert = np.array(matHilbert).T
+        matTime = np.zeros(shape=(noOfRows, noOfCols))
 
         # rows
         for j in range(noOfCols):
-            arrHilbert = [0.] * noOfRows
-            for i in range(noOfRows):
-                arrHilbert[i] = matHilbert[i][j]
-
-            arrTime = self.waveRec1(arrHilbert, levelM)
-
-            for i in range(noOfRows):
-                matTime[i][j] = arrTime[i]
+            # run the reconstruction on the row
+            matTime.T[j] = self.waveRec1(matHilbert[j], levelM)
 
         # cols
         for i in range(noOfRows):
-            arrHilbert = [0.] * noOfCols
-            for j in range(noOfCols):
-                arrHilbert[j] = matTime[i][j]
-
-            arrTime = self.waveRec1(arrHilbert, levelN)
-
-            for j in range(noOfCols):
-                matTime[i][j] = arrTime[j]
+            # run the reconstruction on the column
+            matTime[i] = self.waveRec1(matTime[i], levelN)
 
         return matTime</code></pre>
             </details>
@@ -260,7 +244,7 @@ class BaseTransform:
                         the dimensions of the data</p>
                         <h2 id="attributes">Attributes</h2>
                         <dl>
-                            <dt><strong><code>__wavelet</code></strong> :&ensp;<code>Wavelet</code></dt>
+                            <dt><strong><code>__wavelet</code></strong> :&ensp;<code>WaveletTransform</code></dt>
                             <dd>object of the Wavelet class based on the wavelet name</dd>
                         </dl>
                     </div>
@@ -275,12 +259,12 @@ class BaseTransform:
 
     Attributes
     ----------
-    __wavelet: Wavelet
+    __wavelet: WaveletTransform
         object of the Wavelet class based on the wavelet name
     &#34;&#34;&#34;
 
     def __init__(self, waveletName):
-        self.__wavelet = Wavelet(waveletName)
+        self.__wavelet = WaveletTransform(waveletName)
 
     def getWaveletDefinition(self):
         &#34;&#34;&#34;
@@ -303,7 +287,7 @@ class BaseTransform:
         list
             list of all wavelets
         &#34;&#34;&#34;
-        return list(getAllWavelets())
+        return getAllWavelets()
 
     def waveDec1(self, arrTime, level):
         &#34;&#34;&#34;
@@ -321,8 +305,8 @@ class BaseTransform:
         array_like
             coefficients Frequency or the Hilbert domain
         &#34;&#34;&#34;
-        arrHilbert = arrTime
         length = 0
+        arrHilbert = arrTime.copy()
         dataLength = len(arrHilbert)
         transformWaveletLength = self.__wavelet.__wavelet__.__transformWaveletLength__
 
@@ -370,7 +354,7 @@ class BaseTransform:
 
     def waveDec2(self, matTime):
         &#34;&#34;&#34;
-        Two Dimension wavelet decomposition based on the levels
+        Two Dimension Multi-level wavelet decomposition based on the levels
 
         Parameters
         ----------
@@ -382,41 +366,34 @@ class BaseTransform:
         array_like
             coefficients Time domain
         &#34;&#34;&#34;
+        # shape
         noOfRows = len(matTime)
         noOfCols = len(matTime[0])
+
+        if not isPowerOf2(noOfRows) or not isPowerOf2(noOfCols):
+            raise WrongLengthsOfData(WrongLengthsOfData.__cause__)
+
+        # get the levels
         levelM = getExponent(noOfRows)
         levelN = getExponent(noOfCols)
 
-        matHilbert = [[0.] * noOfRows] * noOfCols
-        matHilbert = np.array(matHilbert).T
+        matHilbert = np.zeros(shape=(noOfRows, noOfCols))
 
         # rows
         for i in range(noOfRows):
-            arrTime = [0.] * noOfCols
-            for j in range(noOfCols):
-                arrTime[j] = matTime[i][j]
-
-            arrHilbert = self.waveDec1(arrTime, levelN)
-
-            for j in range(noOfCols):
-                matHilbert[i][j] = arrHilbert[j]
+            # run the decomposition on the row
+            matHilbert[i] = self.waveDec1(matTime[i], levelN)
 
         # cols
         for j in range(noOfCols):
-            arrTime = [0.] * noOfRows
-            for i in range(noOfRows):
-                arrTime[i] = matHilbert[i][j]
-
-            arrHilbert = self.waveDec1(arrTime, levelM)
-
-            for i in range(noOfRows):
-                matHilbert[i][j] = arrHilbert[i]
+            # run the decomposition on the col
+            matHilbert.T[j] = self.waveDec1(matHilbert.T[j], levelM)
 
         return matHilbert
 
     def waveRec2(self, matHilbert):
         &#34;&#34;&#34;
-        Two Dimension wavelet reconstruction based on the levels
+        Two Dimension Multi-level wavelet reconstruction based on the levels
 
         Parameters
         ----------
@@ -430,33 +407,23 @@ class BaseTransform:
         &#34;&#34;&#34;
         noOfRows = len(matHilbert)
         noOfCols = len(matHilbert[0])
+
+        # getting the levels
         levelM = getExponent(noOfRows)
         levelN = getExponent(noOfCols)
 
-        matTime = [[0.] * noOfRows] * noOfCols
-        matTime = np.array(matTime).T
+        matHilbert = np.array(matHilbert).T
+        matTime = np.zeros(shape=(noOfRows, noOfCols))
 
         # rows
         for j in range(noOfCols):
-            arrHilbert = [0.] * noOfRows
-            for i in range(noOfRows):
-                arrHilbert[i] = matHilbert[i][j]
-
-            arrTime = self.waveRec1(arrHilbert, levelM)
-
-            for i in range(noOfRows):
-                matTime[i][j] = arrTime[i]
+            # run the reconstruction on the row
+            matTime.T[j] = self.waveRec1(matHilbert[j], levelM)
 
         # cols
         for i in range(noOfRows):
-            arrHilbert = [0.] * noOfCols
-            for j in range(noOfCols):
-                arrHilbert[j] = matTime[i][j]
-
-            arrTime = self.waveRec1(arrHilbert, levelN)
-
-            for j in range(noOfCols):
-                matTime[i][j] = arrTime[j]
+            # run the reconstruction on the column
+            matTime[i] = self.waveRec1(matTime[i], levelN)
 
         return matTime</code></pre>
                     </details>
@@ -493,7 +460,7 @@ def getAllWaveletDefinition():
     list
         list of all wavelets
     &#34;&#34;&#34;
-    return list(getAllWavelets())</code></pre>
+    return getAllWavelets()</code></pre>
                             </details>
                         </dd>
                     </dl>
@@ -565,8 +532,8 @@ def getAllWaveletDefinition():
     array_like
         coefficients Frequency or the Hilbert domain
     &#34;&#34;&#34;
-    arrHilbert = arrTime
     length = 0
+    arrHilbert = arrTime.copy()
     dataLength = len(arrHilbert)
     transformWaveletLength = self.__wavelet.__wavelet__.__transformWaveletLength__
 
@@ -584,7 +551,7 @@ def getAllWaveletDefinition():
                             <span>def <span class="ident">waveDec2</span></span>(<span>self, matTime)</span>
                         </code></dt>
                         <dd>
-                            <div class="desc"><p>Two Dimension wavelet decomposition based on the levels</p>
+                            <div class="desc"><p>Two Dimension Multi-level wavelet decomposition based on the levels</p>
                                 <h2 id="parameters">Parameters</h2>
                                 <dl>
                                     <dt><strong><code>matTime</code></strong> :&ensp;<code>array_like</code></dt>
@@ -602,7 +569,7 @@ def getAllWaveletDefinition():
                                 </summary>
                                 <pre><code class="python">def waveDec2(self, matTime):
     &#34;&#34;&#34;
-    Two Dimension wavelet decomposition based on the levels
+    Two Dimension Multi-level wavelet decomposition based on the levels
 
     Parameters
     ----------
@@ -614,35 +581,28 @@ def getAllWaveletDefinition():
     array_like
         coefficients Time domain
     &#34;&#34;&#34;
+    # shape
     noOfRows = len(matTime)
     noOfCols = len(matTime[0])
+
+    if not isPowerOf2(noOfRows) or not isPowerOf2(noOfCols):
+        raise WrongLengthsOfData(WrongLengthsOfData.__cause__)
+
+    # get the levels
     levelM = getExponent(noOfRows)
     levelN = getExponent(noOfCols)
 
-    matHilbert = [[0.] * noOfRows] * noOfCols
-    matHilbert = np.array(matHilbert).T
+    matHilbert = np.zeros(shape=(noOfRows, noOfCols))
 
     # rows
     for i in range(noOfRows):
-        arrTime = [0.] * noOfCols
-        for j in range(noOfCols):
-            arrTime[j] = matTime[i][j]
-
-        arrHilbert = self.waveDec1(arrTime, levelN)
-
-        for j in range(noOfCols):
-            matHilbert[i][j] = arrHilbert[j]
+        # run the decomposition on the row
+        matHilbert[i] = self.waveDec1(matTime[i], levelN)
 
     # cols
     for j in range(noOfCols):
-        arrTime = [0.] * noOfRows
-        for i in range(noOfRows):
-            arrTime[i] = matHilbert[i][j]
-
-        arrHilbert = self.waveDec1(arrTime, levelM)
-
-        for i in range(noOfRows):
-            matHilbert[i][j] = arrHilbert[i]
+        # run the decomposition on the col
+        matHilbert.T[j] = self.waveDec1(matHilbert.T[j], levelM)
 
     return matHilbert</code></pre>
                             </details>
@@ -707,7 +667,8 @@ def getAllWaveletDefinition():
                             <span>def <span class="ident">waveRec2</span></span>(<span>self, matHilbert)</span>
                         </code></dt>
                         <dd>
-                            <div class="desc"><p>Two Dimension wavelet reconstruction based on the levels</p>
+                            <div class="desc"><p>Two Dimension Multi-level wavelet reconstruction based on the
+                                levels</p>
                                 <h2 id="parameters">Parameters</h2>
                                 <dl>
                                     <dt><strong><code>matHilbert</code></strong> :&ensp;<code>array_like</code></dt>
@@ -725,7 +686,7 @@ def getAllWaveletDefinition():
                                 </summary>
                                 <pre><code class="python">def waveRec2(self, matHilbert):
     &#34;&#34;&#34;
-    Two Dimension wavelet reconstruction based on the levels
+    Two Dimension Multi-level wavelet reconstruction based on the levels
 
     Parameters
     ----------
@@ -739,33 +700,23 @@ def getAllWaveletDefinition():
     &#34;&#34;&#34;
     noOfRows = len(matHilbert)
     noOfCols = len(matHilbert[0])
+
+    # getting the levels
     levelM = getExponent(noOfRows)
     levelN = getExponent(noOfCols)
 
-    matTime = [[0.] * noOfRows] * noOfCols
-    matTime = np.array(matTime).T
+    matHilbert = np.array(matHilbert).T
+    matTime = np.zeros(shape=(noOfRows, noOfCols))
 
     # rows
     for j in range(noOfCols):
-        arrHilbert = [0.] * noOfRows
-        for i in range(noOfRows):
-            arrHilbert[i] = matHilbert[i][j]
-
-        arrTime = self.waveRec1(arrHilbert, levelM)
-
-        for i in range(noOfRows):
-            matTime[i][j] = arrTime[i]
+        # run the reconstruction on the row
+        matTime.T[j] = self.waveRec1(matHilbert[j], levelM)
 
     # cols
     for i in range(noOfRows):
-        arrHilbert = [0.] * noOfCols
-        for j in range(noOfCols):
-            arrHilbert[j] = matTime[i][j]
-
-        arrTime = self.waveRec1(arrHilbert, levelN)
-
-        for j in range(noOfCols):
-            matTime[i][j] = arrTime[j]
+        # run the reconstruction on the column
+        matTime[i] = self.waveRec1(matTime[i], levelN)
 
     return matTime</code></pre>
                             </details>

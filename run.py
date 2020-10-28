@@ -1,6 +1,6 @@
 import numpy as np
 
-from wavelet.fast_transform import FastWaveletTransform
+from wavelet import FastWaveletTransform
 
 WAVELET_NAME = "db4"
 t = FastWaveletTransform(WAVELET_NAME)
@@ -11,6 +11,7 @@ data = [[1, 1, 1, 1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1, 1, 1, 1],
         [1, 1, 1, 1, 1, 1, 1, 1]]
 
+# for performing the ancient egyptian decomposition
 data = np.asarray(data).flatten()
 
 # decomposition --> reconstruction

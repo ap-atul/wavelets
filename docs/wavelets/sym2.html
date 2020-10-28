@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1, minimum-scale=1" name="viewport"/>
     <meta content="pdoc 0.9.1" name="generator"/>
-    <title>wavelet.transforms API documentation</title>
-    <meta content="" name="description"/>
+    <title>wavelet.wavelets.sym2 API documentation</title>
+    <meta content="Symlet 2 wavelet" name="description"/>
     <link as="style" crossorigin href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css"
           integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" rel="preload stylesheet">
     <link as="style" crossorigin
@@ -30,37 +30,156 @@
 <main>
     <article id="content">
         <header>
-            <h1 class="title">Module <code>wavelet.transforms</code></h1>
+            <h1 class="title">Module <code>wavelet.wavelets.sym2</code></h1>
         </header>
         <section id="section-intro">
+            <p>Symlet 2 wavelet</p>
             <details class="source">
                 <summary>
                     <span>Expand source code</span>
                 </summary>
-                <pre><code class="python">from wavelet.transforms.base_transform import *</code></pre>
+                <pre><code class="python">&#34;&#34;&#34; Symlet 2 wavelet &#34;&#34;&#34;
+
+
+class Symlet2:
+    &#34;&#34;&#34;
+    Properties
+    ----------
+     near symmetric, orthogonal, biorthogonal
+
+    All values are from http://wavelets.pybytes.com/wavelet/sym2/
+    &#34;&#34;&#34;
+    __name__ = &#34;Symlet Wavelet 2&#34;
+    __motherWaveletLength__ = 4  # length of the mother wavelet
+    __transformWaveletLength__ = 2  # minimum wavelength of input signal
+
+    # decomposition filter
+    # low-pass
+    decompositionLowFilter = [
+        -0.12940952255092145,
+        0.22414386804185735,
+        0.836516303737469,
+        0.48296291314469025,
+    ]
+
+    # high-pass
+    decompositionHighFilter = [
+        -0.48296291314469025,
+        0.836516303737469,
+        -0.22414386804185735,
+        -0.12940952255092145,
+    ]
+
+    # reconstruction filters
+    # low pass
+    reconstructionLowFilter = [
+        0.48296291314469025,
+        0.836516303737469,
+        0.22414386804185735,
+        -0.12940952255092145,
+    ]
+
+    # high-pass
+    reconstructionHighFilter = [
+        -0.12940952255092145,
+        -0.22414386804185735,
+        0.836516303737469,
+        -0.48296291314469025,
+    ]</code></pre>
             </details>
         </section>
         <section>
-            <h2 class="section-title" id="header-submodules">Sub-modules</h2>
+        </section>
+        <section>
+        </section>
+        <section>
+        </section>
+        <section>
+            <h2 class="section-title" id="header-classes">Classes</h2>
             <dl>
-                <dt><code class="name"><a href="base_transform.html" title="wavelet.transforms.base_transform">wavelet.transforms.base_transform</a></code>
-                </dt>
+                <dt id="wavelet.wavelets.sym2.Symlet2"><code class="flex name class">
+                    <span>class <span class="ident">Symlet2</span></span>
+                </code></dt>
                 <dd>
-                    <div class="desc"><p>Base Transform for doing basic calls for dwt &amp; idwt based on the dimensions
-                        called</p></div>
-                </dd>
-                <dt><code class="name"><a href="wavelet_transform.html" title="wavelet.transforms.wavelet_transform">wavelet.transforms.wavelet_transform</a></code>
-                </dt>
-                <dd>
-                    <div class="desc"><p>Discrete Wavelet and Inverse Transform implementation</p></div>
+                    <div class="desc"><h2 id="properties">Properties</h2>
+                        <p>near symmetric, orthogonal, biorthogonal</p>
+                        <p>All values are from <a href="http://wavelets.pybytes.com/wavelet/sym2/">http://wavelets.pybytes.com/wavelet/sym2/</a>
+                        </p></div>
+                    <details class="source">
+                        <summary>
+                            <span>Expand source code</span>
+                        </summary>
+                        <pre><code class="python">class Symlet2:
+    &#34;&#34;&#34;
+    Properties
+    ----------
+     near symmetric, orthogonal, biorthogonal
+
+    All values are from http://wavelets.pybytes.com/wavelet/sym2/
+    &#34;&#34;&#34;
+    __name__ = &#34;Symlet Wavelet 2&#34;
+    __motherWaveletLength__ = 4  # length of the mother wavelet
+    __transformWaveletLength__ = 2  # minimum wavelength of input signal
+
+    # decomposition filter
+    # low-pass
+    decompositionLowFilter = [
+        -0.12940952255092145,
+        0.22414386804185735,
+        0.836516303737469,
+        0.48296291314469025,
+    ]
+
+    # high-pass
+    decompositionHighFilter = [
+        -0.48296291314469025,
+        0.836516303737469,
+        -0.22414386804185735,
+        -0.12940952255092145,
+    ]
+
+    # reconstruction filters
+    # low pass
+    reconstructionLowFilter = [
+        0.48296291314469025,
+        0.836516303737469,
+        0.22414386804185735,
+        -0.12940952255092145,
+    ]
+
+    # high-pass
+    reconstructionHighFilter = [
+        -0.12940952255092145,
+        -0.22414386804185735,
+        0.836516303737469,
+        -0.48296291314469025,
+    ]</code></pre>
+                    </details>
+                    <h3>Class variables</h3>
+                    <dl>
+                        <dt id="wavelet.wavelets.sym2.Symlet2.decompositionHighFilter"><code class="name">var <span
+                                class="ident">decompositionHighFilter</span></code></dt>
+                        <dd>
+                            <div class="desc"></div>
+                        </dd>
+                        <dt id="wavelet.wavelets.sym2.Symlet2.decompositionLowFilter"><code class="name">var <span
+                                class="ident">decompositionLowFilter</span></code></dt>
+                        <dd>
+                            <div class="desc"></div>
+                        </dd>
+                        <dt id="wavelet.wavelets.sym2.Symlet2.reconstructionHighFilter"><code class="name">var <span
+                                class="ident">reconstructionHighFilter</span></code></dt>
+                        <dd>
+                            <div class="desc"></div>
+                        </dd>
+                        <dt id="wavelet.wavelets.sym2.Symlet2.reconstructionLowFilter"><code class="name">var <span
+                                class="ident">reconstructionLowFilter</span></code></dt>
+                        <dd>
+                            <div class="desc"></div>
+                        </dd>
+                    </dl>
                 </dd>
             </dl>
-        </section>
-        <section>
-        </section>
-        <section>
-        </section>
-        <section>
         </section>
     </article>
     <nav id="sidebar">
@@ -71,14 +190,28 @@
         <ul id="index">
             <li><h3>Super-module</h3>
                 <ul>
-                    <li><code><a href="../index.html" title="wavelet">wavelet</a></code></li>
+                    <li><code><a href="index.html" title="wavelet.wavelets">wavelet.wavelets</a></code></li>
                 </ul>
             </li>
-            <li><h3><a href="#header-submodules">Sub-modules</a></h3>
+            <li><h3><a href="#header-classes">Classes</a></h3>
                 <ul>
-                    <li><code><a href="base_transform.html" title="wavelet.transforms.base_transform">wavelet.transforms.base_transform</a></code>
-                    </li>
-                    <li><code><a href="wavelet_transform.html" title="wavelet.transforms.wavelet_transform">wavelet.transforms.wavelet_transform</a></code>
+                    <li>
+                        <h4><code><a href="#wavelet.wavelets.sym2.Symlet2"
+                                     title="wavelet.wavelets.sym2.Symlet2">Symlet2</a></code></h4>
+                        <ul class="">
+                            <li><code><a href="#wavelet.wavelets.sym2.Symlet2.decompositionHighFilter"
+                                         title="wavelet.wavelets.sym2.Symlet2.decompositionHighFilter">decompositionHighFilter</a></code>
+                            </li>
+                            <li><code><a href="#wavelet.wavelets.sym2.Symlet2.decompositionLowFilter"
+                                         title="wavelet.wavelets.sym2.Symlet2.decompositionLowFilter">decompositionLowFilter</a></code>
+                            </li>
+                            <li><code><a href="#wavelet.wavelets.sym2.Symlet2.reconstructionHighFilter"
+                                         title="wavelet.wavelets.sym2.Symlet2.reconstructionHighFilter">reconstructionHighFilter</a></code>
+                            </li>
+                            <li><code><a href="#wavelet.wavelets.sym2.Symlet2.reconstructionLowFilter"
+                                         title="wavelet.wavelets.sym2.Symlet2.reconstructionLowFilter">reconstructionLowFilter</a></code>
+                            </li>
+                        </ul>
                     </li>
                 </ul>
             </li>

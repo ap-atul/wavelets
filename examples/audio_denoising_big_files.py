@@ -1,8 +1,7 @@
 import numpy as np
 import soundfile
 
-from wavelet.fast_transform import FastWaveletTransform
-from wavelet.util.utility import threshold, mad
+from wavelet import FastWaveletTransform, threshold, mad
 
 INPUT_FILE = "/input.wav"
 OUTPUT_FILE = "/output.wav"

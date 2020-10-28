@@ -24,9 +24,49 @@ Note: For n dimension with length not power of 2, you will need to flatten() the
 
 Check the ```examples/``` for some examples on the usage. Refer the html ```docs/```
 
+## Example
+1. Wavelet decomposition and reconstruction
+
+```python
+from wavelet import FastWaveletTransform
+
+WAVELET_NAME = "db4"
+t = FastWaveletTransform(WAVELET_NAME)
+
+# original data
+data = [1, 1, 1, 1, 1, 1, 1, 1]
+
+# decomposition --> reconstruction
+coefficients = t.waveDec(data)
+data = t.waveRec(coefficients)
+
+```
+
+2. Simple discrete transforms
+
+```python
+from wavelet import WaveletTransform, getExponent
+
+transform = WaveletTransform(waveletName="db2")
+data = [1, 2, 3, 4, 5, 6, 7, 9]
+
+# dwt with max level
+coefficients = transform.dwt(data, level=getExponent(len(data)))
+
+# inverse dwt with max level
+data = transform.idwt(coefficients, level=len(coefficients))
+```
+## Applications
+(I'll try to provide some examples for this)
+1. Audio de-noising by cleaning the noise signal from the coefficients
+2. Data cleaning in the sense of Data Mining
+3. Data compression
+4. Digital Communications
+5. Image Processing
+6. etc.
 
 ## Limitations
-The performance is not that good. Help to make it even better by contributing
+The performance can be improved. Help to make it even better by contributing
 
 ## Usage
 1. Clone the repo

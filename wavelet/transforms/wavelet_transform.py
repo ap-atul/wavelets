@@ -3,7 +3,7 @@
 from wavelet.wavelets import getWaveletDefinition
 
 
-class Wavelet:
+class WaveletTransform:
     """
     Class to store the selected wavelet and to perform the dwt & idwt
     based on the wavelet filters

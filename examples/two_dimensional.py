@@ -1,4 +1,4 @@
-from wavelet.fast_transform import FastWaveletTransform
+from wavelet import FastWaveletTransform
 
 WAVELET_NAME = "db4"
 t = FastWaveletTransform(WAVELET_NAME)

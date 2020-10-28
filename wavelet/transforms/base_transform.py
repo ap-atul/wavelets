@@ -2,8 +2,8 @@
 
 import numpy as np
 
-from wavelet.exceptions import WrongLengthsOfData
-from wavelet.transforms.wavelet import Wavelet
+from wavelet.exceptions.custom import WrongLengthsOfData
+from wavelet.transforms.wavelet_transform import WaveletTransform
 from wavelet.util import getExponent, isPowerOf2
 from wavelet.wavelets import getAllWavelets
 
@@ -15,12 +15,12 @@ class BaseTransform:
 
     Attributes
     ----------
-    __wavelet: Wavelet
+    __wavelet: WaveletTransform
         object of the Wavelet class based on the wavelet name
     """
 
     def __init__(self, waveletName):
-        self.__wavelet = Wavelet(waveletName)
+        self.__wavelet = WaveletTransform(waveletName)
 
     def getWaveletDefinition(self):
         """
