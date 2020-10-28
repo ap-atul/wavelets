@@ -126,7 +126,7 @@ class BaseTransform:
         noOfRows = len(matTime)
         noOfCols = len(matTime[0])
 
-        if not isPowerOf2(noOfRows) or isPowerOf2(noOfCols):
+        if not isPowerOf2(noOfRows) or not isPowerOf2(noOfCols):
             raise WrongLengthsOfData(WrongLengthsOfData.__cause__)
 
         # get the levels

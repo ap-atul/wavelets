@@ -20,7 +20,7 @@ t = FastWaveletTransform(waveletName='haar')
 coefficients = t.waveDec(data[: int(s)])
 
 # calculating noise threshold value
-sigma = mad(coefficients[- 1])
+sigma = mad(coefficients)
 thresh = sigma * np.sqrt(2 * np.log(len(coefficients)))
 coefficients = threshold(coefficients, thresh)
 

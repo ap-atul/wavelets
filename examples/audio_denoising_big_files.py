@@ -27,7 +27,7 @@ with soundfile.SoundFile(OUTPUT_FILE, "w", samplerate=rate, channels=1) as of:
         coefficients = t.waveDec(block)
 
         # VISU Shrink
-        sigma = mad(coefficients[- 1])
+        sigma = mad(coefficients)
         thresh = sigma * np.sqrt(2 * np.log(len(block)))
 
         # thresholding using the noise threshold generated

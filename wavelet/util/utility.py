@@ -53,7 +53,6 @@ def decomposeArbitraryLength(number):
 def threshold(data, value, substitute=0):
     """Soft thresholding"""
 
-    data = np.asarray(data)
     magnitude = np.absolute(data)
 
     with np.errstate(divide='ignore'):
