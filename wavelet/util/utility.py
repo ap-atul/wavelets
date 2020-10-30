@@ -68,11 +68,118 @@ def threshold(data, value, substitute=0):
         return np.where(cond, substitute, thresholded)
 
 
-def mad(arr):
-    """ Median Absolute Deviation: a "Robust" version of standard deviation.
-        Indices variability of the sample.
-        https://en.wikipedia.org/wiki/Median_absolute_deviation
+def mad(data):
     """
-    arr = np.ma.array(arr).compressed()
-    med = np.median(arr)
-    return np.median(np.abs(arr - med))
+    Median Absolute Deviation: a "Robust" version of standard deviation.
+    Indices variability of the sample.
+    https://en.wikipedia.org/wiki/Median_absolute_deviation
+    """
+    data = np.ma.array(data).compressed()
+    med = np.median(data)
+    return np.median(np.abs(data - med))
+
+
+def snr(data, axis=0, ddof=0):
+    """
+    Signal to Noise ratio
+    simply given by mean / standard deviation
+    """
+    a = np.asanyarray(data)
+    m = a.mean(axis)
+    sd = a.std(axis=axis, ddof=ddof)
+    return np.where(sd == 0, 0, m / sd)
+
+
+def amp_to_db(S, ref=1.0, min_value=1e-5, top_db=80.0):
+    """
+    Convert an amplitude spectrogram to dB-scaled spectrogram.
+
+    This is equivalent to ``power_to_db(S**2)``
+
+    Parameters
+    ----------
+    S : array_like
+        input amplitude
+
+    ref : scalar
+        If scalar, the amplitude `abs(S)` is scaled relative to `ref`:
+        `20 * log10(S / ref)`.
+        Zeros in the output correspond to positions where `S == ref`.
+
+    min_value : float > 0 [scalar]
+        minimum threshold for `S` and `ref`
+
+    top_db : float >= 0 [scalar]
+        threshold the output at `top_db` below the peak:
+        ``max(20 * log10(S)) - top_db``
+
+
+    Returns
+    -------
+    S_db : np.ndarray
+        ``S`` measured in dB
+    """
+
+    S = np.asarray(S)
+
+    magnitude = np.abs(S)
+    ref_value = np.abs(ref)
+
+    power = np.square(magnitude, out=magnitude)
+
+    return power_to_db(power, ref=ref_value ** 2, min_value=min_value ** 2,
+                       top_db=top_db)
+
+
+def power_to_db(S, ref=1.0, min_value=1e-10, top_db=80.0):
+    """
+    Convert a power spectrogram (amplitude squared) to decibel (dB) units
+
+    This computes the scaling ``10 * log10(S / ref)`` in a numerically
+    stable way.
+
+    Parameters
+    ----------
+    S : np.ndarray
+        input power
+
+    ref : scalar
+        If scalar, the amplitude `abs(S)` is scaled relative to `ref`:
+        `10 * log10(S / ref)`.
+        Zeros in the output correspond to positions where `S == ref`.
+
+    min_value : float > 0 [scalar]
+        minimum threshold for `abs(S)` and `ref`
+
+    top_db : float >= 0 [scalar]
+        threshold the output at `top_db` below the peak:
+        ``max(10 * log10(S)) - top_db``
+
+    Returns
+    -------
+    S_db   : np.ndarray
+        ``S_db ~= 10 * log10(S) - 10 * log10(ref)``
+    """
+
+    S = np.asarray(S)
+
+    if min_value <= 0:
+        raise Exception('min must be strictly positive')
+
+    if np.issubdtype(S.dtype, np.complexfloating):
+        magnitude = np.abs(S)
+    else:
+        magnitude = S
+
+    ref_value = np.abs(ref)
+
+    log_spec = 10.0 * np.log10(np.maximum(min_value, magnitude))
+    log_spec -= 10.0 * np.log10(np.maximum(min_value, ref_value))
+
+    # scaling based on the top db
+    if top_db is not None:
+        if top_db < 0:
+            raise Exception('top_db must be non-negative')
+        log_spec = np.maximum(log_spec, log_spec.max() - top_db)
+
+    return log_spec
