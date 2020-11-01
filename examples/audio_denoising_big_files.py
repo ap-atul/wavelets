@@ -5,7 +5,7 @@ from wavelet import FastWaveletTransform, threshold, mad
 
 INPUT_FILE = "/input.wav"
 OUTPUT_FILE = "/output.wav"
-WAVELET_NAME = "db4"
+WAVELET_NAME = "db4"  # coif1 works vey well
 
 info = soundfile.info(INPUT_FILE)  # getting info of the audio
 rate = info.samplerate
