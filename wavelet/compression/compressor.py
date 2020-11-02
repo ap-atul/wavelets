@@ -58,11 +58,12 @@ class Compressor:
         float
             percentage value of the compression rate
         """
-        data = np.asanyarray(data)
+        data = np.asanyarray(data).flatten()
         noOfZeros = np.count_nonzero(data == 0)
 
         if noOfZeros == 0:
             return noOfZeros
+
         return (noOfZeros / len(data)) * 100
 
     def getMagnitude(self):

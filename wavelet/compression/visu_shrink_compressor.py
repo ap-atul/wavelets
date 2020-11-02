@@ -48,7 +48,7 @@ class VisuShrinkCompressor:
 
     def getCompressionRate(self, data):
         """
-        Returns the compression rate for the input data. Check the Compressio
+        Returns the compression rate for the input data. Check the Compression
         class for the implementation
 
         Parameters
