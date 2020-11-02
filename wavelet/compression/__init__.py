@@ -1,0 +1,4 @@
+from wavelet.compression.compressor import Compressor
+from wavelet.compression.compressor_magnitude import CompressorMagnitude
+from wavelet.compression.compressor_peak import CompressorPeak
+from wavelet.compression.visu_shrink_compressor import VisuShrinkCompressor
