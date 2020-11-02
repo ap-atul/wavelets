@@ -108,14 +108,121 @@ def threshold(data, value, substitute=0):
         return np.where(cond, substitute, thresholded)
 
 
-def mad(arr):
-    &#34;&#34;&#34; Median Absolute Deviation: a &#34;Robust&#34; version of standard deviation.
-        Indices variability of the sample.
-        https://en.wikipedia.org/wiki/Median_absolute_deviation
+def mad(data):
     &#34;&#34;&#34;
-    arr = np.ma.array(arr).compressed()
-    med = np.median(arr)
-    return np.median(np.abs(arr - med))</code></pre>
+    Median Absolute Deviation: a &#34;Robust&#34; version of standard deviation.
+    Indices variability of the sample.
+    https://en.wikipedia.org/wiki/Median_absolute_deviation
+    &#34;&#34;&#34;
+    data = np.ma.array(data).compressed()
+    med = np.median(data)
+    return np.median(np.abs(data - med))
+
+
+def snr(data, axis=0, ddof=0):
+    &#34;&#34;&#34;
+    Signal to Noise ratio
+    simply given by mean / standard deviation
+    &#34;&#34;&#34;
+    a = np.asanyarray(data)
+    m = a.mean(axis)
+    sd = a.std(axis=axis, ddof=ddof)
+    return np.where(sd == 0, 0, m / sd)
+
+
+def amp_to_db(S, ref=1.0, min_value=1e-5, top_db=80.0):
+    &#34;&#34;&#34;
+    Convert an amplitude spectrogram to dB-scaled spectrogram.
+
+    This is equivalent to ``power_to_db(S**2)``
+
+    Parameters
+    ----------
+    S : array_like
+        input amplitude
+
+    ref : scalar
+        If scalar, the amplitude `abs(S)` is scaled relative to `ref`:
+        `20 * log10(S / ref)`.
+        Zeros in the output correspond to positions where `S == ref`.
+
+    min_value : float &gt; 0 [scalar]
+        minimum threshold for `S` and `ref`
+
+    top_db : float &gt;= 0 [scalar]
+        threshold the output at `top_db` below the peak:
+        ``max(20 * log10(S)) - top_db``
+
+
+    Returns
+    -------
+    S_db : np.ndarray
+        ``S`` measured in dB
+    &#34;&#34;&#34;
+
+    S = np.asarray(S)
+
+    magnitude = np.abs(S)
+    ref_value = np.abs(ref)
+
+    power = np.square(magnitude, out=magnitude)
+
+    return power_to_db(power, ref=ref_value ** 2, min_value=min_value ** 2,
+                       top_db=top_db)
+
+
+def power_to_db(S, ref=1.0, min_value=1e-10, top_db=80.0):
+    &#34;&#34;&#34;
+    Convert a power spectrogram (amplitude squared) to decibel (dB) units
+
+    This computes the scaling ``10 * log10(S / ref)`` in a numerically
+    stable way.
+
+    Parameters
+    ----------
+    S : np.ndarray
+        input power
+
+    ref : scalar
+        If scalar, the amplitude `abs(S)` is scaled relative to `ref`:
+        `10 * log10(S / ref)`.
+        Zeros in the output correspond to positions where `S == ref`.
+
+    min_value : float &gt; 0 [scalar]
+        minimum threshold for `abs(S)` and `ref`
+
+    top_db : float &gt;= 0 [scalar]
+        threshold the output at `top_db` below the peak:
+        ``max(10 * log10(S)) - top_db``
+
+    Returns
+    -------
+    S_db   : np.ndarray
+        ``S_db ~= 10 * log10(S) - 10 * log10(ref)``
+    &#34;&#34;&#34;
+
+    S = np.asarray(S)
+
+    if min_value &lt;= 0:
+        raise Exception(&#39;min must be strictly positive&#39;)
+
+    if np.issubdtype(S.dtype, np.complexfloating):
+        magnitude = np.abs(S)
+    else:
+        magnitude = S
+
+    ref_value = np.abs(ref)
+
+    log_spec = 10.0 * np.log10(np.maximum(min_value, magnitude))
+    log_spec -= 10.0 * np.log10(np.maximum(min_value, ref_value))
+
+    # scaling based on the top db
+    if top_db is not None:
+        if top_db &lt; 0:
+            raise Exception(&#39;top_db must be non-negative&#39;)
+        log_spec = np.maximum(log_spec, log_spec.max() - top_db)
+
+    return log_spec</code></pre>
             </details>
         </section>
         <section>
@@ -125,6 +232,78 @@ def mad(arr):
         <section>
             <h2 class="section-title" id="header-functions">Functions</h2>
             <dl>
+                <dt id="wavelet.util.utility.amp_to_db"><code class="name flex">
+                    <span>def <span class="ident">amp_to_db</span></span>(<span>S, ref=1.0, min_value=1e-05, top_db=80.0)</span>
+                </code></dt>
+                <dd>
+                    <div class="desc"><p>Convert an amplitude spectrogram to dB-scaled spectrogram.</p>
+                        <p>This is equivalent to <code>power_to_db(S**2)</code></p>
+                        <h2 id="parameters">Parameters</h2>
+                        <dl>
+                            <dt><strong><code>S</code></strong> :&ensp;<code>array_like</code></dt>
+                            <dd>input amplitude</dd>
+                            <dt><strong><code>ref</code></strong> :&ensp;<code>scalar</code></dt>
+                            <dd>If scalar, the amplitude <code>abs(S)</code> is scaled relative to <code>ref</code>:
+                                <code>20 * log10(S / ref)</code>.
+                                Zeros in the output correspond to positions where <code>S == ref</code>.
+                            </dd>
+                            <dt><strong><code>min_value</code></strong> :&ensp;<code>float &gt; 0 [scalar]</code></dt>
+                            <dd>minimum threshold for <code>S</code> and <code>ref</code></dd>
+                            <dt><strong><code>top_db</code></strong> :&ensp;<code>float &gt;= 0 [scalar]</code></dt>
+                            <dd>threshold the output at <code>top_db</code> below the peak:
+                                <code>max(20 * log10(S)) - top_db</code></dd>
+                        </dl>
+                        <h2 id="returns">Returns</h2>
+                        <dl>
+                            <dt><strong><code>S_db</code></strong> :&ensp;<code>np.ndarray</code></dt>
+                            <dd><code>S</code> measured in dB</dd>
+                        </dl>
+                    </div>
+                    <details class="source">
+                        <summary>
+                            <span>Expand source code</span>
+                        </summary>
+                        <pre><code class="python">def amp_to_db(S, ref=1.0, min_value=1e-5, top_db=80.0):
+    &#34;&#34;&#34;
+    Convert an amplitude spectrogram to dB-scaled spectrogram.
+
+    This is equivalent to ``power_to_db(S**2)``
+
+    Parameters
+    ----------
+    S : array_like
+        input amplitude
+
+    ref : scalar
+        If scalar, the amplitude `abs(S)` is scaled relative to `ref`:
+        `20 * log10(S / ref)`.
+        Zeros in the output correspond to positions where `S == ref`.
+
+    min_value : float &gt; 0 [scalar]
+        minimum threshold for `S` and `ref`
+
+    top_db : float &gt;= 0 [scalar]
+        threshold the output at `top_db` below the peak:
+        ``max(20 * log10(S)) - top_db``
+
+
+    Returns
+    -------
+    S_db : np.ndarray
+        ``S`` measured in dB
+    &#34;&#34;&#34;
+
+    S = np.asarray(S)
+
+    magnitude = np.abs(S)
+    ref_value = np.abs(ref)
+
+    power = np.square(magnitude, out=magnitude)
+
+    return power_to_db(power, ref=ref_value ** 2, min_value=min_value ** 2,
+                       top_db=top_db)</code></pre>
+                    </details>
+                </dd>
                 <dt id="wavelet.util.utility.decomposeArbitraryLength"><code class="name flex">
                     <span>def <span class="ident">decomposeArbitraryLength</span></span>(<span>number)</span>
                 </code></dt>
@@ -194,7 +373,7 @@ def mad(arr):
                     </details>
                 </dd>
                 <dt id="wavelet.util.utility.mad"><code class="name flex">
-                    <span>def <span class="ident">mad</span></span>(<span>arr)</span>
+                    <span>def <span class="ident">mad</span></span>(<span>data)</span>
                 </code></dt>
                 <dd>
                     <div class="desc"><p>Median Absolute Deviation: a "Robust" version of standard deviation.
@@ -205,14 +384,102 @@ def mad(arr):
                         <summary>
                             <span>Expand source code</span>
                         </summary>
-                        <pre><code class="python">def mad(arr):
-    &#34;&#34;&#34; Median Absolute Deviation: a &#34;Robust&#34; version of standard deviation.
-        Indices variability of the sample.
-        https://en.wikipedia.org/wiki/Median_absolute_deviation
+                        <pre><code class="python">def mad(data):
     &#34;&#34;&#34;
-    arr = np.ma.array(arr).compressed()
-    med = np.median(arr)
-    return np.median(np.abs(arr - med))</code></pre>
+    Median Absolute Deviation: a &#34;Robust&#34; version of standard deviation.
+    Indices variability of the sample.
+    https://en.wikipedia.org/wiki/Median_absolute_deviation
+    &#34;&#34;&#34;
+    data = np.ma.array(data).compressed()
+    med = np.median(data)
+    return np.median(np.abs(data - med))</code></pre>
+                    </details>
+                </dd>
+                <dt id="wavelet.util.utility.power_to_db"><code class="name flex">
+                    <span>def <span class="ident">power_to_db</span></span>(<span>S, ref=1.0, min_value=1e-10, top_db=80.0)</span>
+                </code></dt>
+                <dd>
+                    <div class="desc"><p>Convert a power spectrogram (amplitude squared) to decibel (dB) units</p>
+                        <p>This computes the scaling <code>10 * log10(S / ref)</code> in a numerically
+                            stable way.</p>
+                        <h2 id="parameters">Parameters</h2>
+                        <dl>
+                            <dt><strong><code>S</code></strong> :&ensp;<code>np.ndarray</code></dt>
+                            <dd>input power</dd>
+                            <dt><strong><code>ref</code></strong> :&ensp;<code>scalar</code></dt>
+                            <dd>If scalar, the amplitude <code>abs(S)</code> is scaled relative to <code>ref</code>:
+                                <code>10 * log10(S / ref)</code>.
+                                Zeros in the output correspond to positions where <code>S == ref</code>.
+                            </dd>
+                            <dt><strong><code>min_value</code></strong> :&ensp;<code>float &gt; 0 [scalar]</code></dt>
+                            <dd>minimum threshold for <code>abs(S)</code> and <code>ref</code></dd>
+                            <dt><strong><code>top_db</code></strong> :&ensp;<code>float &gt;= 0 [scalar]</code></dt>
+                            <dd>threshold the output at <code>top_db</code> below the peak:
+                                <code>max(10 * log10(S)) - top_db</code></dd>
+                        </dl>
+                        <h2 id="returns">Returns</h2>
+                        <dl>
+                            <dt><code>S_db
+                                : np.ndarray</code></dt>
+                            <dd><code>S_db ~= 10 * log10(S) - 10 * log10(ref)</code></dd>
+                        </dl>
+                    </div>
+                    <details class="source">
+                        <summary>
+                            <span>Expand source code</span>
+                        </summary>
+                        <pre><code class="python">def power_to_db(S, ref=1.0, min_value=1e-10, top_db=80.0):
+    &#34;&#34;&#34;
+    Convert a power spectrogram (amplitude squared) to decibel (dB) units
+
+    This computes the scaling ``10 * log10(S / ref)`` in a numerically
+    stable way.
+
+    Parameters
+    ----------
+    S : np.ndarray
+        input power
+
+    ref : scalar
+        If scalar, the amplitude `abs(S)` is scaled relative to `ref`:
+        `10 * log10(S / ref)`.
+        Zeros in the output correspond to positions where `S == ref`.
+
+    min_value : float &gt; 0 [scalar]
+        minimum threshold for `abs(S)` and `ref`
+
+    top_db : float &gt;= 0 [scalar]
+        threshold the output at `top_db` below the peak:
+        ``max(10 * log10(S)) - top_db``
+
+    Returns
+    -------
+    S_db   : np.ndarray
+        ``S_db ~= 10 * log10(S) - 10 * log10(ref)``
+    &#34;&#34;&#34;
+
+    S = np.asarray(S)
+
+    if min_value &lt;= 0:
+        raise Exception(&#39;min must be strictly positive&#39;)
+
+    if np.issubdtype(S.dtype, np.complexfloating):
+        magnitude = np.abs(S)
+    else:
+        magnitude = S
+
+    ref_value = np.abs(ref)
+
+    log_spec = 10.0 * np.log10(np.maximum(min_value, magnitude))
+    log_spec -= 10.0 * np.log10(np.maximum(min_value, ref_value))
+
+    # scaling based on the top db
+    if top_db is not None:
+        if top_db &lt; 0:
+            raise Exception(&#39;top_db must be non-negative&#39;)
+        log_spec = np.maximum(log_spec, log_spec.max() - top_db)
+
+    return log_spec</code></pre>
                     </details>
                 </dd>
                 <dt id="wavelet.util.utility.scalb"><code class="name flex">
@@ -227,6 +494,27 @@ def mad(arr):
                         <pre><code class="python">def scalb(f, scaleFactor):
     &#34;&#34;&#34;Return the scale for the factor&#34;&#34;&#34;
     return f * pow(2., scaleFactor)</code></pre>
+                    </details>
+                </dd>
+                <dt id="wavelet.util.utility.snr"><code class="name flex">
+                    <span>def <span class="ident">snr</span></span>(<span>data, axis=0, ddof=0)</span>
+                </code></dt>
+                <dd>
+                    <div class="desc"><p>Signal to Noise ratio
+                        simply given by mean / standard deviation</p></div>
+                    <details class="source">
+                        <summary>
+                            <span>Expand source code</span>
+                        </summary>
+                        <pre><code class="python">def snr(data, axis=0, ddof=0):
+    &#34;&#34;&#34;
+    Signal to Noise ratio
+    simply given by mean / standard deviation
+    &#34;&#34;&#34;
+    a = np.asanyarray(data)
+    m = a.mean(axis)
+    sd = a.std(axis=axis, ddof=ddof)
+    return np.where(sd == 0, 0, m / sd)</code></pre>
                     </details>
                 </dd>
                 <dt id="wavelet.util.utility.threshold"><code class="name flex">
@@ -274,6 +562,8 @@ def mad(arr):
             </li>
             <li><h3><a href="#header-functions">Functions</a></h3>
                 <ul class="">
+                    <li><code><a href="#wavelet.util.utility.amp_to_db"
+                                 title="wavelet.util.utility.amp_to_db">amp_to_db</a></code></li>
                     <li><code><a href="#wavelet.util.utility.decomposeArbitraryLength"
                                  title="wavelet.util.utility.decomposeArbitraryLength">decomposeArbitraryLength</a></code>
                     </li>
@@ -282,8 +572,11 @@ def mad(arr):
                     <li><code><a href="#wavelet.util.utility.isPowerOf2" title="wavelet.util.utility.isPowerOf2">isPowerOf2</a></code>
                     </li>
                     <li><code><a href="#wavelet.util.utility.mad" title="wavelet.util.utility.mad">mad</a></code></li>
+                    <li><code><a href="#wavelet.util.utility.power_to_db" title="wavelet.util.utility.power_to_db">power_to_db</a></code>
+                    </li>
                     <li><code><a href="#wavelet.util.utility.scalb" title="wavelet.util.utility.scalb">scalb</a></code>
                     </li>
+                    <li><code><a href="#wavelet.util.utility.snr" title="wavelet.util.utility.snr">snr</a></code></li>
                     <li><code><a href="#wavelet.util.utility.threshold"
                                  title="wavelet.util.utility.threshold">threshold</a></code></li>
                 </ul>
