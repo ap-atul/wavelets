@@ -3,7 +3,7 @@
 import numpy as np
 
 from wavelet.transforms import BaseTransform
-from wavelet.util import getExponent, isPowerOf2, decomposeArbitraryLength, scalb
+from wavelet.util import isPowerOf2, decomposeArbitraryLength, scalb, getExponent
 
 
 class FastWaveletTransform(BaseTransform):
@@ -15,7 +15,7 @@ class FastWaveletTransform(BaseTransform):
     def __init__(self, waveletName):
         super().__init__(waveletName)
 
-    def waveRec(self, arrHilbert):
+    def waveRec(self, arrHilbert, level=None):
         """
         Wavelet Reconstruction
 
@@ -32,19 +32,23 @@ class FastWaveletTransform(BaseTransform):
         arrHilbert = np.array(arrHilbert, dtype=np.float_)
         dimensions = np.ndim(arrHilbert)
 
+        # setting the max level
+        if level is None:
+            level = getExponent(len(arrHilbert))
+
         # checking if the data is not of arbitrary length
         # special cases only for 1D arrays
         if dimensions == 1 and not isPowerOf2(len(arrHilbert)):
             # perform ancient egyptian decomposition
-            return self.__waveRecAncientEgyptian(arrHilbert)
+            return self.__waveRecAncientEgyptian(arrHilbert, level)
 
         if dimensions == 1:
-            level = getExponent(len(arrHilbert))
-            return self.waveRec1(list(arrHilbert), level)
+            return self.waveRec1(arrHilbert, level)
+
         elif dimensions == 2:
             return self.waveRec2(arrHilbert)
 
-    def waveDec(self, arrTime):
+    def waveDec(self, arrTime, level=None):
         """
         Wavelet Decomposition
 
@@ -61,21 +65,24 @@ class FastWaveletTransform(BaseTransform):
         arrTime = np.array(arrTime, dtype=np.float_)
         dimensions = np.ndim(arrTime)
 
+        # setting the max level
+        if level is None:
+            level = getExponent(len(arrTime))
+
         # checking if the data is not of arbitrary length
         # special cases only for 1D arrays
         if dimensions == 1 and not isPowerOf2(len(arrTime)):
             # perform ancient egyptian decomposition
-            return self.__waveDecAncientEgyptian(arrTime)
+            return self.__waveDecAncientEgyptian(arrTime, level)
 
         # data of length power of 2
         if dimensions == 1:
-            level = getExponent(len(arrTime))
-            return self.waveDec1(list(arrTime), level)
+            return self.waveDec1(arrTime, level)
 
         elif dimensions == 2:
             return self.waveDec2(arrTime)
 
-    def __waveDecAncientEgyptian(self, arrTime):
+    def __waveDecAncientEgyptian(self, arrTime, level):
         """
         Wavelet decomposition for data of arbitrary length
 
@@ -108,14 +115,14 @@ class FastWaveletTransform(BaseTransform):
             arrTimeSliced = arrTime[offset: (offset + sliceIndex)]
 
             # run the wavelet decomposition for the slice
-            arrHilbert.extend(self.waveDec(arrTimeSliced))
+            arrHilbert.extend(self.waveDec1(arrTimeSliced, level))
 
             # incrementing the offset
             offset += sliceIndex
 
         return arrHilbert
 
-    def __waveRecAncientEgyptian(self, arrHilbert):
+    def __waveRecAncientEgyptian(self, arrHilbert, level):
         """
         Wavelet reconstruction for data of arbitrary length
 
@@ -149,7 +156,7 @@ class FastWaveletTransform(BaseTransform):
             arrHilbertSliced = arrHilbert[offset: (offset + sliceIndex)]
 
             # run the wavelet decomposition for the slice
-            arrTimeSliced = self.waveRec(arrHilbertSliced)
+            arrTimeSliced = self.waveRec1(arrHilbertSliced, level)
             arrTime.extend(arrTimeSliced)
 
             # incrementing the offset

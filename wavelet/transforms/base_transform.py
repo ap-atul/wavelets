@@ -68,8 +68,8 @@ class BaseTransform:
 
         while dataLength >= transformWaveletLength and length < level:
             arrTemp = self.__wavelet.dwt(arrHilbert, dataLength)
-
             arrHilbert[: len(arrTemp)] = arrTemp
+
             dataLength >>= 1
             length += 1
 
@@ -102,8 +102,8 @@ class BaseTransform:
 
         while len(arrTime) >= h >= transformWaveletLength:
             arrTemp = self.__wavelet.idwt(arrTime, h)
-
             arrTime[: len(arrTemp)] = arrTemp
+
             h <<= 1
 
         return arrTime

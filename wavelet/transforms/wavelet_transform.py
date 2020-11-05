@@ -5,7 +5,7 @@ from wavelet.wavelets import getWaveletDefinition
 
 class WaveletTransform:
     """
-    Class to store the selected wavelet and to perform the dwt & idwt
+    Class to run the selected wavelet and to perform the dwt & idwt
     based on the wavelet filters
 
     Attributes
@@ -45,6 +45,7 @@ class WaveletTransform:
                 while k >= level:
                     k -= level
 
+                # approx & detail coefficient
                 arrHilbert[i] += arrTime[k] * self.__wavelet__.decompositionLowFilter[j]
                 arrHilbert[i + a] += arrTime[k] * self.__wavelet__.decompositionHighFilter[j]
 
@@ -78,6 +79,7 @@ class WaveletTransform:
                 while k >= level:
                     k -= level
 
+                # summing the approx & detail coefficient
                 arrTime[k] += (arrHilbert[i] * self.__wavelet__.reconstructionLowFilter[j] +
                                arrHilbert[i + a] * self.__wavelet__.reconstructionHighFilter[j])
 
