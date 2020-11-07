@@ -41,8 +41,10 @@ class VisuShrinkCompressor:
         array_like
             thresholded coefficients
         """
-        sigma = mad(coefficients)
-        self.__threshold = sigma * np.sqrt(2 * np.log(len(coefficients)))
+        # calculating the noise threhold only one
+        if self.__threshold is None:
+            sigma = mad(coefficients)
+            self.__threshold = sigma * np.sqrt(2 * np.log(len(coefficients)))
 
         return threshold(coefficients, self.__threshold)
 

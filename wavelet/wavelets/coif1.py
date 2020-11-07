@@ -1,4 +1,5 @@
 """ Coiflets 1 wavelet """
+import numpy as np
 
 
 class Coiflets1:
@@ -15,42 +16,42 @@ class Coiflets1:
 
     # decomposition filter
     # low-pass
-    decompositionLowFilter = [
+    decompositionLowFilter = np.array([
         -0.01565572813546454,
         -0.0727326195128539,
         0.38486484686420286,
         0.8525720202122554,
         0.3378976624578092,
         -0.0727326195128539,
-    ]
+    ])
 
     # high-pass
-    decompositionHighFilter = [
+    decompositionHighFilter = np.array([
         0.0727326195128539,
         0.3378976624578092,
         -0.8525720202122554,
         0.38486484686420286,
         0.0727326195128539,
         -0.01565572813546454,
-    ]
+    ])
 
     # reconstruction filters
     # low pass
-    reconstructionLowFilter = [
+    reconstructionLowFilter = np.array([
         -0.0727326195128539,
         0.3378976624578092,
         0.8525720202122554,
         0.38486484686420286,
         -0.0727326195128539,
         -0.01565572813546454,
-    ]
+    ])
 
     # high-pass
-    reconstructionHighFilter = [
+    reconstructionHighFilter = np.array([
         -0.01565572813546454,
         0.0727326195128539,
         0.38486484686420286,
         -0.8525720202122554,
         0.3378976624578092,
         0.0727326195128539,
-    ]
+    ])
