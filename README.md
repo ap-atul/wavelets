@@ -1,9 +1,9 @@
 # Wavelets
 Python implementation of the Fast Wavelet Transform (FWT) on 1D, 2D, and 3D(soon) input signals/data.
-The common wavelets like Haar, and Daubechies is available. 
+The common wavelets like Haar, and Daubechies is available, along with 60+ wavelets. 
 
 The code is according to the software development process, so hopefully its user-friendly or
-dev-friendly
+dev-friendly.
 
 ## Introduction
 The simple Wavelet Transform is given by the formula
@@ -19,8 +19,7 @@ Dimension implemented (1D, 2D)
 Just call  ```waveDec``` for wavelet decomposition for any dim, length array
 And ```waveRec``` for wavelet reconstruction for any dim, length array
 
-Note: For n dimension with length not power of 2, you will need to flatten() the array
-```np.asarray(data).flatten```
+Update: Use it with any length of data. (1D & 2D)
 
 Check the ```examples/``` for some examples on the usage. Refer the html ```docs/```
 

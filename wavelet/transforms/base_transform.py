@@ -143,7 +143,7 @@ class BaseTransform:
         # cols
         for j in range(noOfCols):
             # run the decomposition on the col
-            matHilbert.T[j] = self.waveDec1(matHilbert.T[j], levelM)
+            matHilbert[:, j] = self.waveDec1(matHilbert[:, j], levelM)
 
         return matHilbert
 
@@ -164,17 +164,20 @@ class BaseTransform:
         noOfRows = len(matHilbert)
         noOfCols = len(matHilbert[0])
 
+        if not isPowerOf2(noOfRows) or not isPowerOf2(noOfCols):
+            raise WrongLengthsOfData(WrongLengthsOfData.__cause__)
+
         # getting the levels
         levelM = getExponent(noOfRows)
         levelN = getExponent(noOfCols)
 
-        matHilbert = np.array(matHilbert).T
+        matHilbert = np.array(matHilbert)
         matTime = np.zeros(shape=(noOfRows, noOfCols))
 
         # rows
         for j in range(noOfCols):
             # run the reconstruction on the row
-            matTime.T[j] = self.waveRec1(matHilbert[j], levelM)
+            matTime[:, j] = self.waveRec1(matHilbert[:, j], levelM)
 
         # cols
         for i in range(noOfRows):

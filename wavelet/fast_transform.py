@@ -21,6 +21,8 @@ class FastWaveletTransform(BaseTransform):
 
         Parameters
         ----------
+        level: int
+            level for reconstruction
         arrHilbert: array_like
             input array in the Hilbert domain
 
@@ -42,6 +44,10 @@ class FastWaveletTransform(BaseTransform):
             # perform ancient egyptian decomposition
             return self.__waveRecAncientEgyptian(arrHilbert, level)
 
+        # check for arbitrary length of data for 2D arrays
+        if dimensions == 2 and not (isPowerOf2(len(arrHilbert[0])) or isPowerOf2(len(arrHilbert))):
+            return self.__waveRecAncientEgyptian2(arrHilbert)
+
         if dimensions == 1:
             return self.waveRec1(arrHilbert, level)
 
@@ -54,6 +60,8 @@ class FastWaveletTransform(BaseTransform):
 
         Parameters
         ----------
+        level: int
+            level for decomposition
         arrTime: array_like
             input array in the Time domain
 
@@ -74,6 +82,10 @@ class FastWaveletTransform(BaseTransform):
         if dimensions == 1 and not isPowerOf2(len(arrTime)):
             # perform ancient egyptian decomposition
             return self.__waveDecAncientEgyptian(arrTime, level)
+
+        # check for arbitrary length of data for 2D arrays
+        if dimensions == 2 and not (isPowerOf2(len(arrTime[0])) or isPowerOf2(len(arrTime))):
+            return self.__waveDecAncientEgyptian2(arrTime)
 
         # data of length power of 2
         if dimensions == 1:
@@ -145,7 +157,6 @@ class FastWaveletTransform(BaseTransform):
         array_like
             hilbert time array
         """
-
         arrTime = list()
         powers = decomposeArbitraryLength(len(arrHilbert))
         offset = 0
@@ -163,3 +174,47 @@ class FastWaveletTransform(BaseTransform):
             offset += sliceIndex
 
         return arrTime
+
+    def __waveDecAncientEgyptian2(self, matTime):
+        # shape
+        noOfRows = len(matTime)
+        noOfCols = len(matTime[0])
+
+        levelM = getExponent(noOfRows)
+        levelN = getExponent(noOfCols)
+
+        matHilbert = np.zeros(shape=(noOfRows, noOfCols))
+
+        # rows
+        for i in range(noOfRows):
+            # run the decomposition
+            matHilbert[i] = self.__waveDecAncientEgyptian(matTime[i], levelN)
+
+        # cols
+        for j in range(noOfCols):
+            # run the decomposition
+            matHilbert[:, j] = self.__waveDecAncientEgyptian(matHilbert[:, j], levelM)
+
+        return matHilbert
+
+    def __waveRecAncientEgyptian2(self, matHilbert):
+        noOfRows = len(matHilbert)
+        noOfCols = len(matHilbert[0])
+
+        # getting the levels
+        levelM = getExponent(noOfRows)
+        levelN = getExponent(noOfCols)
+
+        matTime = np.zeros(shape=(noOfRows, noOfCols))
+
+        # rows
+        for j in range(noOfCols):
+            # run the reconstruction on the row
+            matTime[:, j] = self.__waveRecAncientEgyptian(matHilbert[:, j], levelM)
+
+        # cols
+        for i in range(noOfRows):
+            # run the reconstruction on the column
+            matTime[i] = self.__waveRecAncientEgyptian(matTime[i], levelN)
+
+        return matTime
