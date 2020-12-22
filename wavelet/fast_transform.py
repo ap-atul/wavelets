@@ -3,7 +3,7 @@
 import numpy as np
 
 from wavelet.transforms import BaseTransform
-from wavelet.util import isPowerOf2, decomposeArbitraryLength, scalb, getExponent
+from wavelet.util import decomposeArbitraryLength, scalb, getExponent
 
 
 class FastWaveletTransform(BaseTransform):
@@ -38,21 +38,15 @@ class FastWaveletTransform(BaseTransform):
         if level is None:
             level = getExponent(len(arrHilbert))
 
-        # checking if the data is not of arbitrary length
-        # special cases only for 1D arrays
-        if dimensions == 1 and not isPowerOf2(len(arrHilbert)):
-            # perform ancient egyptian decomposition
+        # for single dim data
+        if dimensions == 1:
+            # perform ancient egyptian reconstruction
             return self.__waveRecAncientEgyptian(arrHilbert, level)
 
-        # check for arbitrary length of data for 2D arrays
-        if dimensions == 2 and not (isPowerOf2(len(arrHilbert[0])) or isPowerOf2(len(arrHilbert))):
+        # for two dim data
+        if dimensions == 2:
+            # perform ancient egyptian reconstruction
             return self.__waveRecAncientEgyptian2(arrHilbert)
-
-        if dimensions == 1:
-            return self.waveRec1(arrHilbert, level)
-
-        elif dimensions == 2:
-            return self.waveRec2(arrHilbert)
 
     def waveDec(self, arrTime, level=None):
         """
@@ -77,22 +71,15 @@ class FastWaveletTransform(BaseTransform):
         if level is None:
             level = getExponent(len(arrTime))
 
-        # checking if the data is not of arbitrary length
-        # special cases only for 1D arrays
-        if dimensions == 1 and not isPowerOf2(len(arrTime)):
+        # for two single data
+        if dimensions == 1:
             # perform ancient egyptian decomposition
             return self.__waveDecAncientEgyptian(arrTime, level)
 
-        # check for arbitrary length of data for 2D arrays
-        if dimensions == 2 and not (isPowerOf2(len(arrTime[0])) or isPowerOf2(len(arrTime))):
+        # for two dim data
+        if dimensions == 2:
+            # perform ancient egyptian decomposition
             return self.__waveDecAncientEgyptian2(arrTime)
-
-        # data of length power of 2
-        if dimensions == 1:
-            return self.waveDec1(arrTime, level)
-
-        elif dimensions == 2:
-            return self.waveDec2(arrTime)
 
     def __waveDecAncientEgyptian(self, arrTime, level):
         """
@@ -176,6 +163,28 @@ class FastWaveletTransform(BaseTransform):
         return arrTime
 
     def __waveDecAncientEgyptian2(self, matTime):
+        """
+        Wavelet decomposition for data of arbitrary length (2D)
+
+        References
+        ----------
+        The array is distributed by the length of the power of 2
+        and then wavelet decomposition is performed
+        Look into the utility.decomposeArbitraryLength function
+
+        for a data with length 42
+        Ex: 42 = 2^5, 2^3, 2^1   i.e. 32, 8, 2 lengths partitions are made
+
+        Parameters
+        ----------
+        matTime: array_like
+            input 2D array in the time domain
+
+        Returns
+        -------
+        array_like
+            hilbert domain array
+        """
         # shape
         noOfRows = len(matTime)
         noOfCols = len(matTime[0])
@@ -198,6 +207,28 @@ class FastWaveletTransform(BaseTransform):
         return matHilbert
 
     def __waveRecAncientEgyptian2(self, matHilbert):
+        """
+        Wavelet reconstruction for data of arbitrary length (2D)
+
+        References
+        ----------
+        The array is distributed by the length of the power of 2
+        and then wavelet decomposition is performed
+        Look into the utility.decomposeArbitraryLength function
+
+        for a data with length 42
+        Ex: 42 = 2^5, 2^3, 2^1   i.e. 32, 8, 2 lengths partitions are made
+
+        Parameters
+        ----------
+        matHilbert: array_like
+            input 2D array in the hilbert domain
+
+        Returns
+        -------
+        array_like
+            hilbert time array
+        """
         noOfRows = len(matHilbert)
         noOfCols = len(matHilbert[0])
 
