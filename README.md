@@ -5,6 +5,7 @@ The common wavelets like Haar, and Daubechies is available, along with 60+ wavel
 The code is according to the software development process, so hopefully its user-friendly or
 dev-friendly.
 
+
 ## Introduction
 The simple Wavelet Transform is given by the formula
 
@@ -13,6 +14,7 @@ The simple Wavelet Transform is given by the formula
 The fundamental idea of wavelet transforms is that the transformation should allow only changes in time extension, but not shape.
 This is affected by choosing suitable basis functions that allow for this.
 Changes in the time extension are expected to conform to the corresponding analysis frequency of the basis function.
+
 
 ## API
 Dimension implemented (1D, 2D)
@@ -23,7 +25,21 @@ Update: Use it with any length of data. (1D & 2D)
 
 Check the ```examples/``` for some examples on the usage. Refer the html ```docs/```
 
-## Example
+
+## Installation
+1. Install using pip
+```console
+pip install git+https://github.com/AP-Atul/Wavelets
+```
+
+2. Clone the repo and run setup
+```console
+git clone https://github.com/AP-Atul/Wavelets.git
+python setup.py install
+```
+
+
+## Examples
 1. Wavelet decomposition and reconstruction
 
 ```python
@@ -55,6 +71,7 @@ coefficients = transform.dwt(data, level=getExponent(len(data)))
 # inverse dwt with max level
 data = transform.idwt(coefficients, level=len(coefficients))
 ```
+
 ## Applications
 (I'll try to provide some examples for this)
 1. Audio de-noising by cleaning the noise signal from the coefficients
@@ -64,16 +81,6 @@ data = transform.idwt(coefficients, level=len(coefficients))
 5. Image Processing
 6. etc.
 
+
 ## Limitations
 The performance can be improved. Help to make it even better by contributing
-
-## Usage
-1. Clone the repo
-```console
-$ git clone https://github.com/AP-Atul/Wavelets.git
-```
-2. Install the package
-```console
-python setup.py install
-```
-
