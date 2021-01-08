@@ -11,7 +11,6 @@ setup(
               'wavelet/util',
               'wavelet/wavelets/',
               'wavelet/compression'],
-    scripts=['wavelet/'],
     url='https://github.com/AP-Atul/Wavelets',
     license='LICENSE',
     description='Simple and easy to understand implementation of Wavelet Transform',
