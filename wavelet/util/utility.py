@@ -87,7 +87,13 @@ def snr(data, axis=0, ddof=0):
     a = np.asanyarray(data)
     m = a.mean(axis)
     sd = a.std(axis=axis, ddof=ddof)
-    return np.where(sd == 0, 0, m / sd)
+    return np.where(sd == 0 or m == 0, 0, m / sd)
+
+
+def rmse(y):
+    """ Returns the root mean squared error between y and x signals """
+    x = np.zeros(shape=y.shape)
+    return np.sqrt(np.mean(np.power(np.subtract(y, x), 2)))
 
 
 def amp_to_db(S, ref=1.0, min_value=1e-5, top_db=80.0):
