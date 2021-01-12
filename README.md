@@ -29,12 +29,12 @@ Check the ```examples/``` for some examples on the usage. Refer the html ```docs
 ## Installation
 1. Install using pip
 ```console
-pip install git+https://github.com/AP-Atul/Wavelets
+pip install git+https://github.com/AP-Atul/wavelets
 ```
 
 2. Clone the repo and run setup
 ```console
-git clone https://github.com/AP-Atul/Wavelets.git
+git clone https://github.com/AP-Atul/wavelets.git
 python setup.py install
 ```
 
