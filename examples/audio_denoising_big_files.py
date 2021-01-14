@@ -5,10 +5,11 @@ import soundfile
 
 from wavelet import FastWaveletTransform
 from wavelet.compression import VisuShrinkCompressor
+from wavelet.util import snr
 
-INPUT_FILE = "/home/atul/Videos/gretel_small.wav"
-OUTPUT_FILE = "/home/atul/Videos/gretel_small_denoised.wav"
-WAVELET_NAME = "coif1"  # coif1 works vey well
+INPUT_FILE = "/home/atul/Music/fish.wav"
+OUTPUT_FILE = "/home/atul/Music/fish_denoised.wav"
+WAVELET_NAME = "coif3"  # coif1 works very well
 
 info = soundfile.info(INPUT_FILE)  # getting info of the audio
 rate = info.samplerate
